@@ -13,7 +13,6 @@ Deck::Deck() {
     }
 }
 
-
 void Deck::shuffle(int seed){
     static std::mt19937 rng(seed);
 

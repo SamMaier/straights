@@ -38,15 +38,31 @@ public:
     static void printHand() {
         Hand hand;
         std::vector<Card> cards;
-        cards.push_back(Card(CLUB, EIGHT));
+        cards.push_back(Card(SPADE, EIGHT));
         cards.push_back(Card(SPADE, KING));
+        cards.push_back(Card(HEART, EIGHT));
         cards.push_back(Card(SPADE, SEVEN));
 
         hand.addCard(cards[0]);
         hand.addCard(cards[1]);
         hand.addCard(cards[2]);
 
-        std::cout << hand << std::endl;
+
+        Table table;
+        table.addCard(cards[3]);
+        std::vector<Card> validMoves = hand.getValidMoves(table.getCards());
+
+        std::cout << "Board:" << std::endl << table << std::endl;
+        std::cout << "Your hand: " << hand << std::endl;
+        std::cout << "Valid moves: ";
+        std::cout << validMoves[0];
+        for (int i = 1; i < validMoves.size(); i++)
+            std::cout << " " << validMoves[i];
+        std::cout << std::endl;
+
+
+
 
     }
+
 };

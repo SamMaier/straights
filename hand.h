@@ -7,23 +7,26 @@
 
 
 #include <vector>
+#include <set>
 #include "Card.h"
 
 class Hand {
 public:
-    Hand() : cards(new std::vector<Card>) {}
+    Hand() : cards_(new std::vector<Card>) {}
     void addCard(Card& card) {
-        cards->push_back(card);
+        cards_->push_back(card);
     }
     void removeCard(Card& card){
-        std::remove(cards->begin(), cards->end(), card);
+        std::remove(cards_->begin(), cards_->end(), card);
     }
     std::vector<Card>* getCards()const {
-        return cards;
+        return cards_;
     }
 
+    std::vector<Card> getValidMoves(std::set<Card> cardsOnBoard) const;
+
 private:
-    std::vector<Card>* cards;
+    std::vector<Card>* cards_;
 };
 
 
