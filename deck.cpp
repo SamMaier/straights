@@ -32,9 +32,9 @@ const Card* Deck::getCards()const {
     return cards_;
 }
 
-std::ostream &operator<<(std::ostream &out, const Deck &t) {
+std::ostream &operator<<(std::ostream &out, const Deck &d) {
     int numCards = SUIT_COUNT * RANK_COUNT;
-    const Card* cards = t.getCards();
+    const Card* cards = d.getCards();
     for (int i = 0; i < numCards / 13; i++) {
         for (int j = 0; j < 13; j++) {
             out << cards[i*13 + j] << (j != 12 ? " " : "");

@@ -20,6 +20,6 @@ private:
     Card cards_[SUIT_COUNT * RANK_COUNT];
 };
 
-std::ostream &operator<<(std::ostream &out, const Deck &t);
+std::ostream &operator<<(std::ostream &out, const Deck &d);
 
 #endif //STRAIGHTS_DECK_H

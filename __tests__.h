@@ -2,6 +2,7 @@
 #include <vector>
 #include "table.h"
 #include "deck.h"
+#include "hand.h"
 
 class Test {
 public:
@@ -32,5 +33,20 @@ public:
         std::cout << std::endl;
         deck.shuffle();
         std::cout << deck << std::endl;
+    }
+
+    static void printHand() {
+        Hand hand;
+        std::vector<Card> cards;
+        cards.push_back(Card(CLUB, EIGHT));
+        cards.push_back(Card(SPADE, KING));
+        cards.push_back(Card(SPADE, SEVEN));
+
+        hand.addCard(cards[0]);
+        hand.addCard(cards[1]);
+        hand.addCard(cards[2]);
+
+        std::cout << hand << std::endl;
+
     }
 };
