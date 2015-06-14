@@ -3,10 +3,16 @@
 #include <cassert>
 using namespace std;
 
+Card::Card(){
+    suit_ = Suit::CLUB;
+    rank_ = Rank::ACE;
+}
+
 Card::Card(Suit s, Rank r){
 	suit_ = s;
 	rank_ = r;
 }
+
 
 Suit Card::getSuit() const{
 	return suit_;
