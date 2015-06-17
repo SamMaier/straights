@@ -16,7 +16,7 @@ public:
     std::set<Card> getCards() const;
     std::set<Card> getSuit(int suit) const;
 private:
-    std::set<Card>* m_cards;
+    std::set<Card>* cards_;
 };
 
 

@@ -17,14 +17,15 @@ std::ostream &operator<<(std::ostream &out, const Hand &h) {
     return out;
 }
 
+
 std::vector<Card> Hand::getValidMoves(std::set<Card> playedCards) const {
     std::vector<Card> validMoves;
 
     // If the seven of spades is in a hand, the player must play it
-   if ((std::find(cards_->begin(), cards_->end(), Card(SPADE, SEVEN))) != cards_->end() ) {
-       validMoves.push_back(Card(SPADE, SEVEN));
-       return validMoves;
-   }
+    if ((std::find(cards_->begin(), cards_->end(), Card(SPADE, SEVEN))) != cards_->end() ) {
+        validMoves.push_back(Card(SPADE, SEVEN));
+        return validMoves;
+    }
 
     std::set<Card> allValidMoves;
     for (Card c : playedCards) {
@@ -41,3 +42,4 @@ std::vector<Card> Hand::getValidMoves(std::set<Card> playedCards) const {
     return validMoves;
 
 }
+

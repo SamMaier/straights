@@ -4,18 +4,18 @@
 
 #include "table.h"
 
-Table::Table() :  m_cards(new std::set<Card>()) {}
-Table::~Table(){ delete m_cards; }
+Table::Table() :  cards_(new std::set<Card>()) {}
+Table::~Table(){ delete cards_; }
 
 std::set<Card> Table::getCards() const {
-    return *m_cards;
+    return *cards_;
 }
 
 // 0: Clubs, 1: Diamonds, 2: Hearts, 3: Spades
 std::set<Card> Table::getSuit(int suit) const{
     std::set<Card> cards;
 
-    for (const Card & c : *m_cards)
+    for (const Card & c : *cards_)
         if (c.getSuit() == suit)
             cards.insert(c);
 
@@ -44,6 +44,6 @@ std::ostream &operator<<(std::ostream &out, const Table &t) {
 }
 
 void Table::addCard(Card &card) {
-    m_cards->insert(card);
+    cards_->insert(card);
 }
 

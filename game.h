@@ -6,6 +6,7 @@
 #define STRAIGHTS_GAME_H
 
 
+#include <vector>
 #include "deck.h"
 #include "Card.h"
 #include "hand.h"
@@ -21,10 +22,10 @@ public:
 private:
     void nextTurn();
     void nextRound();
-    int currentPlayer;
-    Hand hands[];
-    int points[];
-
+    int currentPlayer_;
+    Deck* deck_;
+    std::vector<Hand> hands_;
+    std::vector<int> scores_;
 };
 
 
