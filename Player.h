@@ -8,14 +8,16 @@
 class Player {
 public:
     Player(int playerNumber);
-    virtual Command& getPlay(const Table&) = 0;
+    virtual Command getPlay(const Table&) = 0;
     int getScore();
     void setHand(const Hand*);
+
+protected:
+    const Hand* hand_;
 
 private:
     int playerNumber_;
     int score_;
-    const Hand* hand_;
 };
 
 #endif

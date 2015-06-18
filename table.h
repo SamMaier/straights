@@ -13,7 +13,7 @@ public:
     Table();
     ~Table();
     void addCard(Card& card);
-    std::set<Card> getCards() const;
+    std::set<Card> getCardsOnBoard() const;
     std::set<Card> getSuit(int suit) const;
 private:
     std::set<Card>* cards_;
