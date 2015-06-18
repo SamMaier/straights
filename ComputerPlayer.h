@@ -9,7 +9,7 @@
 class ComputerPlayer : public Player {
 public:
     ComputerPlayer(int playerNumber);
-    Command getPlay(const Table&) const;
+    Command getPlay(const Table&);
 
 private:
 };

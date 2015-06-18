@@ -9,6 +9,7 @@ class Player {
 public:
     Player(int playerNumber);
     virtual Command getPlay(const Table&) = 0;
+    void addScore(int score);
     int getScore();
     void setHand(const Hand*);
 

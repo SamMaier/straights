@@ -9,7 +9,7 @@
 class HumanPlayer : public Player {
 public:
     HumanPlayer(int playerNumber);
-    Command getPlay(const Table&) const;
+    Command getPlay(const Table&);
 
 private:
 };

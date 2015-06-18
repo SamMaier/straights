@@ -13,11 +13,10 @@
 
 class Hand {
 public:
-    Hand() {};
-    void addCard(Card& card) {
+    void addCard(Card card) {
         cards_.push_back(card);
-    };
-    void removeCard(Card& card){
+    }
+    void removeCard(Card card){
         std::remove(cards_.begin(), cards_.end(), card);
     }
     std::vector<Card> getCards()const {
