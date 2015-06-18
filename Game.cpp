@@ -32,11 +32,14 @@ Player *getMinScorePlayer(std::vector<Player>* players) {
 
 Game::Game(int seed, View* view) {
     for (int player = 0; player < NUM_PLAYERS; player++) {
-//        bool human = view->checkIfHuman(std::to_string(player + 1));
+        bool human = view->checkIfHuman(std::to_string(player + 1));
+        players_.push_back(Player(player + 1, human, view));
     }
     currentRound_ = -1;
     running_ = true;
     view_ = view;
+    seed_ = seed;
+    nextRound();
 }
 
 const Deck* Game::getDeck() {
@@ -61,7 +64,6 @@ void Game::discard(Card card) {
 
 void Game::exit() {
     running_ = false;
-    view_->alertGameEnd(&players_[0]); // TODO: Make real winner
 }
 
 void Game::disablePlayer() {
@@ -98,10 +100,12 @@ void Game::nextRound() {
 
     hands_.clear();
     discards_.clear();
-    hands_.reserve(NUM_PLAYERS);
-    discards_.reserve(NUM_PLAYERS);
+    for (int player = 0; player < NUM_PLAYERS; player++) {
+        hands_.push_back(Hand());
+        discards_.push_back(std::vector<Card>());
+    }
     for (int deckLocation = 0; deckLocation < Deck::NUM_CARDS; deckLocation++) {
-        int player = deckLocation / NUM_PLAYERS;
+        int player = deckLocation / (Deck::NUM_CARDS / NUM_PLAYERS);
         Card card = deck_.getCards()->at(deckLocation);
         hands_[player].addCard(card);
 
@@ -116,6 +120,8 @@ void Game::nextRound() {
 
     table_.clear();
     currentRound_++;
+
+    deck_.shuffle();
 
     view_->alertBeginRound(&players_[currentPlayer_]);
 

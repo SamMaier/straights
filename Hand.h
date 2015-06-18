@@ -17,7 +17,7 @@ public:
         cards_.push_back(card);
     }
     void removeCard(Card card){
-        std::remove(cards_.begin(), cards_.end(), card);
+        cards_.erase(std::remove(cards_.begin(), cards_.end(), card));
     }
     std::vector<Card> getCards()const {
         return cards_;

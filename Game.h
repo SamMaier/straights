@@ -42,6 +42,7 @@ private:
     std::vector<Player> players_;
     bool running_;
     View* view_;
+    int seed_;
 
 };
 

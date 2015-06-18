@@ -6,10 +6,10 @@
 #include <random>
 
 Deck::Deck() {
-    cards_.reserve(Deck::NUM_CARDS);
     for (int suit = 0; suit < SUIT_COUNT; suit++) {
         for (int rank = 0; rank < RANK_COUNT; rank++) {
-            cards_[suit*RANK_COUNT + rank] = Card((Suit) suit, (Rank) rank);
+            //cards_[suit*RANK_COUNT + rank] = Card((Suit) suit, (Rank) rank);
+            cards_.push_back(Card((Suit) suit, (Rank) rank));
         }
     }
 }

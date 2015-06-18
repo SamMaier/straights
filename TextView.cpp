@@ -28,7 +28,7 @@ void TextView::alertBeginRound(Player *firstPlayer) {
 void TextView::alertEmptyHand(Player *player, int oldScore) {
     int scoreGained = player->getScore() - oldScore;
     std::cout << "Player " << player->getName() << "'s discards: " << Card::prettyPrint(*(player->getDiscards())) << std::endl;
-    std::cout << "Player " << player->getName() << "'s score: " << oldScore << " + " << scoreGained << " = " << player->getScore();
+    std::cout << "Player " << player->getName() << "'s score: " << oldScore << " + " << scoreGained << " = " << player->getScore() << std::endl;
 
 }
 
