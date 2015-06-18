@@ -7,7 +7,7 @@
 
 class Player {
 public:
-    Player(int playerNumber);
+    Player(int playerNumber, bool isHuman);
     virtual Command getPlay(const Table&) = 0;
     std::string getName();
     void addScore(int score);

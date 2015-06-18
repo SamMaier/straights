@@ -1,6 +1,9 @@
 #include "Player.h"
 
-Player::Player(int playerNumber) : hand_(NULL), playerNumber_(playerNumber){};
+Player::Player(int playerNumber, bool isHuman) : hand_(NULL), playerNumber_(playerNumber){
+
+
+};
 
 std::string Player::getName() {
     return std::to_string(playerNumber_);
