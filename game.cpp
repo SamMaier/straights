@@ -4,13 +4,14 @@
 
 #include "game.h"
 
-Game::Game(int seed) {
+Game::Game(int seed, View* view) {
     /*players_.reserve(NUM_PLAYERS);
     for (int player = 0; player < NUM_PLAYERS; player++) {
         players_.at(player);
     }*/
     currentRound_ = -1;
     running_ = true;
+    view_ = view;
 
 
 }
@@ -67,6 +68,7 @@ void Game::run() {
             switch(command.type) {
                 case Type::PLAY:
                     play(command.card);
+                    view_->alertPlayedCard(&players_[currentPlayer_], command.card);
                     break;
                 case Type::DISCARD:
                     discard(command.card);
