@@ -2,7 +2,7 @@
 // Created by Shiranka Miskin on 6/13/15.
 //
 
-#include "deck.h"
+#include "Deck.h"
 #include <random>
 
 Deck::Deck() {
@@ -12,7 +12,6 @@ Deck::Deck() {
             cards_[suit*RANK_COUNT + rank] = Card((Suit) suit, (Rank) rank);
         }
     }
-    Rank r = Rank::ACE;
 }
 
 void Deck::shuffle(int seed){

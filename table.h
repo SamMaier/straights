@@ -12,13 +12,11 @@ class Table {
 public:
     std::set<Card> getCardsOnBoard() const;
     void playCard(Card card);
-    void discardCard(Card card);
     void clear() { cards_.clear(); }
     std::set<Card> getCards() const;
     std::set<Card> getSuit(int suit) const;
 private:
     std::set<Card> cards_;
-    std::set<Card> discards_;
 };
 
 

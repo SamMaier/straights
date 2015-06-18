@@ -2,8 +2,8 @@
 #define _HUMANPLAYER_
 
 #include "Player.h"
-#include "hand.h"
-#include "table.h"
+#include "Hand.h"
+#include "Table.h"
 #include "Command.h"
 
 class HumanPlayer : public Player {

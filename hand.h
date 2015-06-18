@@ -22,6 +22,9 @@ public:
     std::vector<Card> getCards()const {
         return cards_;
     }
+    bool isEmpty() {
+        return cards_.size() <= 0;
+    }
 
     std::vector<Card> getValidMoves(std::set<Card> cardsOnBoard) const;
 

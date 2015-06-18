@@ -22,6 +22,21 @@ Rank Card::getRank() const{
 	return rank_;
 }
 
+std::string Card::toString() const{
+	string suits[SUIT_COUNT] = {"C", "D", "H", "S"};
+	string ranks[RANK_COUNT] = {"A", "2", "3", "4", "5", "6",
+								"7", "8", "9", "10", "J", "Q", "K"};
+	return ranks[rank_] + suits[suit_];
+}
+
+std::string Card::prettyPrint(std::vector<Card> cards) {
+	if (cards.size() <= 0) return "";
+	std::string output = cards[0].toString();
+	for (int i = 1; i < cards.size(); i++)
+		output += " " + cards[i].toString();
+	return output;
+}
+
 bool operator==(const Card &a, const Card &b){
 	return a.getSuit() == b.getSuit() && a.getRank() == b.getRank();
 }
@@ -46,13 +61,9 @@ bool operator<= (const Card &a, const Card &b){
     return !(a > b);
 }
 
+
 ostream &operator<<(ostream &out, const Card &c){
-	string suits[SUIT_COUNT] = {"C", "D", "H", "S"};
-	string ranks[RANK_COUNT] = {"A", "2", "3", "4", "5", "6",
-		"7", "8", "9", "10", "J", "Q", "K"};
-		
-	out << ranks[c.getRank()] << suits[c.getSuit()];
-	
+	out << c.toString();
 	return out;
 }
 

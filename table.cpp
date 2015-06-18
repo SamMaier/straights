@@ -2,7 +2,7 @@
 // Created by Shiranka Miskin on 6/13/15.
 //
 
-#include "table.h"
+#include "Table.h"
 
 std::set<Card> Table::getCardsOnBoard() const {
     return cards_;
@@ -29,7 +29,7 @@ std::ostream &operator<<(std::ostream &out, const Table &t) {
         if (it != cards.end()) {
             out << *it;
             it++;
-            for (it; it != cards.end(); ++it)
+            for (; it != cards.end(); ++it)
                 out << " " << *it;
         }
         if (suit != Suit::SUIT_COUNT - 1)
@@ -44,7 +44,6 @@ void Table::playCard(Card card) {
     cards_.insert(card);
 }
 
-void Table::discardCard(Card card) {
-    discards_.insert(card);
+std::set<Card> Table::getCards() const {
+    return cards_;
 }
-
