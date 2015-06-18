@@ -14,10 +14,10 @@ public:
     Deck();
     void shuffle(int seed = 0);
 
-    const Card * getCards()const;
+    const std::vector<Card>* getCards() const;
+    static const int NUM_CARDS = Suit::SUIT_COUNT * Rank::RANK_COUNT;
 private:
-
-    Card cards_[SUIT_COUNT * RANK_COUNT];
+    std::vector<Card> cards_;
 };
 
 std::ostream &operator<<(std::ostream &out, const Deck &d);

@@ -20,7 +20,7 @@ public:
 
         Table table;
         for (Card & c : cards) {
-            table.addCard(c);
+            table.playCard(c);
         }
 
         std::cout << table << std::endl;
@@ -49,7 +49,7 @@ public:
 
 
         Table table;
-        table.addCard(cards[3]);
+        table.playCard(cards[3]);
         std::vector<Card> validMoves = hand.getValidMoves(table.getCards());
 
         std::cout << "Board:" << std::endl << table << std::endl;

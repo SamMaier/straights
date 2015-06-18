@@ -10,22 +10,29 @@
 #include "deck.h"
 #include "Card.h"
 #include "hand.h"
+#include "table.h"
+
 
 class Game {
 public:
-    Game();
+    Game(int seed = 0);
+    void run();
+    static const int NUM_PLAYERS = 4;
+private:
     void play(Card card);
     void discard(Card card);
-    Deck getDeck();
     void disablePlayer();
     void exit();
-private:
     void nextTurn();
     void nextRound();
     int currentPlayer_;
-    Deck* deck_;
+    int currentRound_;
+    Deck deck_;
+    Table table_;
     std::vector<Hand> hands_;
     std::vector<int> scores_;
+    bool running_;
+
 };
 
 
