@@ -42,11 +42,11 @@ Game::Game(int seed, View* view) {
     nextRound();
 }
 
-const Deck* Game::getDeck() {
+const Deck* Game::getDeck() const{
     return &deck_;
 }
 
-const Table *Game::getTable() {
+const Table *Game::getTable() const{
     return &table_;
 }
 

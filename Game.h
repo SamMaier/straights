@@ -21,8 +21,8 @@ class Game {
 public:
     Game(int seed = 0, View* view = NULL);
     void run();
-    const Deck* getDeck();
-    const Table* getTable();
+    const Deck* getDeck() const;
+    const Table* getTable() const;
     static const int NUM_PLAYERS = 4;
     static const int MAX_SCORE = 80;
 private:

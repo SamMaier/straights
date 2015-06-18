@@ -7,7 +7,7 @@
 
 class Strategy {
 public:
-    virtual Command getPlay(const Hand&, const Table&) = 0;
+    virtual Command getPlay(const Hand&, const Table&) const = 0;
 };
 
 #endif

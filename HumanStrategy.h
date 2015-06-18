@@ -7,7 +7,7 @@
 class HumanStrategy : public Strategy {
 public:
     HumanStrategy(View*);
-    Command getPlay(const Hand&, const Table&);
+    Command getPlay(const Hand&, const Table&) const;
 private:
     View* view_;
 };

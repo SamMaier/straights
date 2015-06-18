@@ -4,7 +4,7 @@ using namespace std;
 
 HumanStrategy::HumanStrategy(View* v) : view_(v){};
 
-Command HumanStrategy::getPlay(const Hand& hand, const Table& table) {
+Command HumanStrategy::getPlay(const Hand& hand, const Table& table) const{
     vector<Card> validMoves =  hand.getValidMoves(table.getCardsOnBoard());
 
     Command c = Command();

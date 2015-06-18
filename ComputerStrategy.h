@@ -6,7 +6,7 @@
 
 class ComputerStrategy : public Strategy {
 public:
-    Command getPlay(const Hand&, const Table&);
+    Command getPlay(const Hand&, const Table&) const;
 private:
 };
 

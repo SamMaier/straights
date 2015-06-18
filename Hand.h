@@ -19,10 +19,10 @@ public:
     void removeCard(Card card){
         cards_.erase(std::remove(cards_.begin(), cards_.end(), card));
     }
-    std::vector<Card> getCards()const {
+    std::vector<Card> getCards() const {
         return cards_;
     }
-    bool isEmpty() {
+    bool isEmpty() const{
         return cards_.size() <= 0;
     }
 
