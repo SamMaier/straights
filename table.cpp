@@ -29,7 +29,7 @@ std::ostream &operator<<(std::ostream &out, const Table &t) {
         if (it != cards.end()) {
             out << *it;
             it++;
-            for (it; it != cards.end(); ++it)
+            for (; it != cards.end(); ++it)
                 out << " " << *it;
         }
         if (suit != Suit::SUIT_COUNT - 1)

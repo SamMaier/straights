@@ -32,7 +32,7 @@ Player *getMinScorePlayer(std::vector<Player>* players) {
 
 Game::Game(int seed, View* view) {
     for (int player = 0; player < NUM_PLAYERS; player++) {
-        bool human = view->checkIfHuman(std::to_string(player + 1));
+//        bool human = view->checkIfHuman(std::to_string(player + 1));
     }
     currentRound_ = -1;
     running_ = true;
