@@ -28,8 +28,8 @@ public:
     virtual void alertLegalPlays(std::vector<Card> legalPlays);
     virtual void alertIllegalPlay();
     virtual void alertNoDiscard();
-    virtual Command getPlay();
-    virtual bool checkIfHuman(std::string playerName);
+    virtual Command getPlay() = 0;
+    virtual bool checkIfHuman(std::string playerName) = 0;
 
 };
 

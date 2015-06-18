@@ -25,10 +25,6 @@ void View::alertEmptyHand(Player *player, int oldScore) {
 void View::alertDeck(Deck *deck) {
 }
 
-bool View::checkIfHuman(std::string playerName) {
-    return false;
-}
-
 void View::alertTable(Table *table) {
 }
 
@@ -44,5 +40,3 @@ void View::alertIllegalPlay() {
 void View::alertNoDiscard() {
 }
 
-Command View::getPlay() {
-}
