@@ -10,6 +10,7 @@
 #include "Card.h"
 #include "Deck.h"
 #include "Game.h"
+#include "Command.h"
 
 class Game;
 class Player;
