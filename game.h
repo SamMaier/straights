@@ -7,14 +7,14 @@
 
 
 #include <vector>
-#include "deck.h"
+#include "Deck.h"
 #include "Card.h"
-#include "hand.h"
-#include "table.h"
+#include "Hand.h"
+#include "Table.h"
 #include "Player.h"
 #include "ComputerPlayer.h"
 #include "HumanPlayer.h"
-#include "view.h"
+#include "View.h"
 
 
 class Game {

@@ -2,7 +2,7 @@
 // Created by Shiranka Miskin on 6/17/15.
 //
 
-#include "game.h"
+#include "Game.h"
 
 Game::Game(int seed, View* view) {
     /*players_.reserve(NUM_PLAYERS);

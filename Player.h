@@ -1,8 +1,8 @@
 #ifndef _PLAYER_
 #define _PLAYER_
 
-#include "hand.h"
-#include "table.h"
+#include "Hand.h"
+#include "Table.h"
 #include "Command.h"
 
 class Player {

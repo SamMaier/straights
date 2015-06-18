@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
-#include "table.h"
-#include "deck.h"
-#include "hand.h"
+#include "Table.h"
+#include "Deck.h"
+#include "Hand.h"
 
 class Test {
 public:

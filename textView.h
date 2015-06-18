@@ -6,7 +6,7 @@
 #define STRAIGHTS_TEXTVIEW_H
 
 
-#include "view.h"
+#include "View.h"
 
 class TextView : public View{
 public:

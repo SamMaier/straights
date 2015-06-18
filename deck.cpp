@@ -2,7 +2,7 @@
 // Created by Shiranka Miskin on 6/13/15.
 //
 
-#include "deck.h"
+#include "Deck.h"
 #include <random>
 
 Deck::Deck() {
