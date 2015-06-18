@@ -14,11 +14,12 @@
 #include "Player.h"
 #include "ComputerPlayer.h"
 #include "HumanPlayer.h"
+#include "view.h"
 
 
 class Game {
 public:
-    Game(int seed = 0);
+    Game(int seed = 0, View* view = NULL);
     void run();
     static const int NUM_PLAYERS = 4;
 private:
@@ -36,6 +37,7 @@ private:
     std::vector<int> scores_;
     std::vector<Player> players_;
     bool running_;
+    View* view_;
 
 };
 
