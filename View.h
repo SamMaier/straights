@@ -12,6 +12,7 @@
 #include "Game.h"
 
 class Game;
+class Player;
 
 class View {
 public:
