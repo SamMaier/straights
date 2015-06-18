@@ -5,38 +5,38 @@
 #include <iostream>
 #include "TextView.h"
 
-void TextView::alertPlayedCard(Player *player, Card card) {
+void TextView::alertPlayedCard(const Player *player, Card card) {
     std::cout << "Player " << player->getName() << " plays " << card << "." << std::endl;
 }
 
-void TextView::alertDiscardCard(Player *player, Card card) {
+void TextView::alertDiscardCard(const Player *player, Card card) {
     std::cout << "Player " << player->getName() << " discards " << card << "." << std::endl;
 }
 
-void TextView::alertRagequit(Player* player) {
+void TextView::alertRagequit(const Player* player) {
     std::cout << "Player " << player->getName() << " ragequits.  A computer will now take over." << std::endl;
 }
 
-void TextView::alertGameEnd(Player* winner) {
+void TextView::alertGameEnd(const Player* winner) {
     std::cout << "Player " << winner->getName() << " wins!" << std::endl;
 }
 
-void TextView::alertBeginRound(Player *firstPlayer) {
+void TextView::alertBeginRound(const Player *firstPlayer) {
     std::cout << "A new round begins.  It's player " << firstPlayer->getName() << "'s turn to play." << std::endl;
 }
 
-void TextView::alertEmptyHand(Player *player, int oldScore) {
+void TextView::alertEmptyHand(const Player *player, int oldScore) {
     int scoreGained = player->getScore() - oldScore;
     std::cout << "Player " << player->getName() << "'s discards: " << Card::prettyPrint(*(player->getDiscards())) << std::endl;
     std::cout << "Player " << player->getName() << "'s score: " << oldScore << " + " << scoreGained << " = " << player->getScore();
 
 }
 
-void TextView::alertDeck(Deck* deck) {
+void TextView::alertDeck(const Deck* deck) {
     std::cout << *deck << std::endl;
 }
 
-void TextView::alertTable(Table *table) {
+void TextView::alertTable(const Table *table) {
     std::cout << "Cards on the table:" << std::endl;
     std::cout << *table << std::endl;
 }
@@ -56,7 +56,7 @@ Command TextView::getPlay() {
     return command;
 }
 
-void TextView::alertHand(Hand *hand) {
+void TextView::alertHand(const Hand *hand) {
     std::cout << "Your hand: " << *hand << std::endl;
 }
 

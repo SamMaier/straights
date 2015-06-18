@@ -121,6 +121,16 @@ void Game::nextRound() {
 
 }
 
+bool Game::isValidPlay(const Card& card, const Hand& hand, const Table& table) {
+    std::vector<Card> validMoves = hand.getValidMoves(table.getCardsOnBoard());
+
+    if (std::find(validMoves.begin(), validMoves.end(), card) != validMoves.end()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void Game::run() {
     while (running_) {
         Command command = players_[currentPlayer_].getPlay(table_);

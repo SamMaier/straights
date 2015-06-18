@@ -10,6 +10,7 @@ public:
     Command getPlay(const Hand&, const Table&);
 private:
     View* view_;
+    static bool isValidCommand(const Command&, const Hand& hand, const Table& table);
 };
 
 #endif

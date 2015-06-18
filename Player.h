@@ -12,14 +12,14 @@ class View;
 class Player {
 public:
     Player(int playerNumber, bool isHuman, View*);
-    Command getPlay(const Table&);
-    std::string getName();
+    Command getPlay(const Table&) const;
+    std::string getName() const;
     void addScore(int score);
-    int getScore();
+    int getScore() const;
     void setHand(const Hand* hand);
     void setDiscards(const std::vector<Card>* discards);
-    const std::vector<Card>* getDiscards();
-    const Hand* getHand();
+    const std::vector<Card>* getDiscards() const;
+    const Hand* getHand() const;
 
 private:
     int playerNumber_;

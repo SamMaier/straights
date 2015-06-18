@@ -11,15 +11,15 @@ Player::Player(int playerNumber, bool isHuman, View* view) : playerNumber_(playe
     }
 }
 
-std::string Player::getName() {
+std::string Player::getName() const {
     return std::to_string(playerNumber_);
 }
 
-Command Player::getPlay(const Table& table) {
+Command Player::getPlay(const Table& table) const {
     return strategy_->getPlay(*hand_, table);
 }
 
-int Player::getScore() {
+int Player::getScore() const {
     return score_;
 }
 
@@ -35,10 +35,10 @@ void Player::setDiscards(const std::vector<Card>* discards) {
     discards_ = discards;
 }
 
-const std::vector<Card> * Player::getDiscards() {
+const std::vector<Card> * Player::getDiscards() const {
     return discards_;
 }
 
-const Hand *Player::getHand() {
+const Hand *Player::getHand() const {
     return hand_;
 }

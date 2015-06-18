@@ -25,6 +25,7 @@ public:
     const Table* getTable();
     static const int NUM_PLAYERS = 4;
     static const int MAX_SCORE = 80;
+    static bool isValidPlay(const Card& card, const Hand& hand, const Table& table);
 private:
     void play(Card card);
     void discard(Card card);
