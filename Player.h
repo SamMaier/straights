@@ -10,6 +10,7 @@ public:
     Player(int playerNumber);
     virtual Command& getPlay(const Table&) = 0;
     int getScore();
+    void addScore(int score);
     void setHand(const Hand*);
 
 private:

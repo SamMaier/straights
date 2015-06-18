@@ -5,12 +5,14 @@
 #include "game.h"
 
 Game::Game(int seed) {
-    scores_.reserve(NUM_PLAYERS);
+    /*players_.reserve(NUM_PLAYERS);
     for (int player = 0; player < NUM_PLAYERS; player++) {
-        scores_.at(player) = 0;
-    }
+        players_.at(player);
+    }*/
     currentRound_ = -1;
     running_ = true;
+
+
 }
 
 void Game::play(Card card) {
@@ -39,13 +41,17 @@ void Game::nextRound() {
 
     hands_.clear();
     hands_.reserve(NUM_PLAYERS);
-    for (int i = 0; i < Deck::NUM_CARDS; i++) {
-        int player = i / NUM_PLAYERS;
-        Card card = deck_.getCards()->at(i);
+    for (int deckLocation = 0; deckLocation < Deck::NUM_CARDS; deckLocation++) {
+        int player = deckLocation / NUM_PLAYERS;
+        Card card = deck_.getCards()->at(deckLocation);
         hands_[player].addCard(card);
 
         if (card.getRank() == Rank::SEVEN && card.getSuit() == Suit::SPADE)
             currentPlayer_ = player;
+    }
+
+    for (int player = 0; player < NUM_PLAYERS; player++) {
+        players_[player].setHand(&hands_[player]);
     }
 
     table_.clear();
@@ -57,7 +63,28 @@ void Game::run() {
     int maxScore = 0;
     while (running_) {
         while (maxScore < 80) {
+            Command command = players_[currentPlayer_].getPlay(table_);
+            switch(command.type) {
+                case Type::PLAY:
+                    play(command.card);
+                    break;
+                case Type::DISCARD:
+                    discard(command.card);
+                    break;
+                case Type::RAGEQUIT:
+                    disablePlayer();
+                    break;
+                case Type::QUIT:
+                    exit();
+                    break;
+                case Type::DECK:
 
+
+                    break;
+                default:
+                    break;
+
+            }
         }
     }
 

@@ -11,6 +11,7 @@
 #include "Card.h"
 #include "hand.h"
 #include "table.h"
+#include "Player.h"
 
 
 class Game {
@@ -31,6 +32,7 @@ private:
     Table table_;
     std::vector<Hand> hands_;
     std::vector<int> scores_;
+    std::vector<Player> players_;
     bool running_;
 
 };
