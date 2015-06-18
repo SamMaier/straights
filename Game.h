@@ -21,8 +21,8 @@ class Game {
 public:
     Game(int seed = 0, View* view = NULL);
     void run();
-    const Deck* getDeck();
-    const Table* getTable();
+    const Deck* getDeck() const;
+    const Table* getTable() const;
     static const int NUM_PLAYERS = 4;
     static const int MAX_SCORE = 80;
     static bool isValidPlay(const Card& card, const Hand& hand, const Table& table);
@@ -43,6 +43,7 @@ private:
     std::vector<Player> players_;
     bool running_;
     View* view_;
+    int seed_;
 
 };
 

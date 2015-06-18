@@ -5,7 +5,7 @@ using namespace std;
 
 HumanStrategy::HumanStrategy(View* v) : view_(v){};
 
-Command HumanStrategy::getPlay(const Hand& hand, const Table& table) {
+Command HumanStrategy::getPlay(const Hand& hand, const Table& table) const{
     view_->alertTable(&table);
     view_->alertHand(&hand);
 
@@ -23,7 +23,7 @@ Command HumanStrategy::getPlay(const Hand& hand, const Table& table) {
 
 }
 
-bool HumanStrategy::isValidCommand(const Command& c, const Hand& hand, const Table& table) {
+bool HumanStrategy::isValidCommand(const Command& c, const Hand& hand, const Table& table){
     if (c.type == Type::PLAY || c.type == Type::DISCARD) {
         if (Game::isValidPlay(c.card, hand, table)) {
             if (c.type == Type::PLAY) {
