@@ -19,11 +19,13 @@ Game::Game(int seed, View* view) {
 void Game::play(Card card) {
     hands_[currentPlayer_].removeCard(card);
     table_.playCard(card);
+    view_->alertPlayedCard(&players_[currentPlayer_], card);
 }
 
 void Game::discard(Card card) {
     hands_[currentPlayer_].removeCard(card);
     table_.discardCard(card);
+    view_->alertDiscardCard(&players_[currentPlayer_], card);
 }
 
 void Game::exit() {
@@ -68,7 +70,6 @@ void Game::run() {
             switch(command.type) {
                 case Type::PLAY:
                     play(command.card);
-                    view_->alertPlayedCard(&players_[currentPlayer_], command.card);
                     break;
                 case Type::DISCARD:
                     discard(command.card);

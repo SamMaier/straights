@@ -17,6 +17,8 @@ public:
     virtual void alertDiscardCard(Player* player, Card card) {}
     virtual void alertRagequit(Player* player) {}
     virtual void alertGameEnd(Game* game) {}
+    virtual void alertBeginRound(Player* firstPlayer) {}
+    virtual void alertEmptyHand(Player* player) {};
 };
 
 
