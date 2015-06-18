@@ -44,7 +44,6 @@ void Table::playCard(Card card) {
     cards_.insert(card);
 }
 
-void Table::discardCard(Card card) {
-    discards_.insert(card);
+std::set<Card> Table::getCards() const {
+    return cards_;
 }
-

@@ -13,9 +13,17 @@ public:
     void alertPlayedCard(Player* player, Card card);
     void alertDiscardCard(Player* player, Card card);
     void alertRagequit(Player* player);
-    void alertGameEnd(Game* game);
+    void alertGameEnd(Player* winner);
     void alertBeginRound(Player* firstPlayer);
-    void alertEmptyHand(Player* player);
+    void alertEmptyHand(Player* player, int oldScore);
+    void alertDeck(Deck *deck);
+    void alertTable(Table* table);
+    bool checkIfHuman(std::string playerName);
+    void alertHand(Hand* hand);
+    void alertLegalPlays(std::vector<Card> legalPlays);
+    void alertIllegalPlay();
+    void alertNoDiscard();
+    Command getPlay();
 };
 
 
