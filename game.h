@@ -12,6 +12,8 @@
 #include "hand.h"
 #include "table.h"
 #include "Player.h"
+#include "ComputerPlayer.h"
+#include "HumanPlayer.h"
 #include "view.h"
 
 

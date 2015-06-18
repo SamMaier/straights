@@ -4,7 +4,7 @@
 
 #include "table.h"
 
-std::set<Card> Table::getCards() const {
+std::set<Card> Table::getCardsOnBoard() const {
     return cards_;
 }
 

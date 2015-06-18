@@ -1,11 +1,13 @@
 # Clion Files
 CMakeLists.txt
 .idea/
+Straights
 
 # Compiled Object files
 *.slo
 *.lo
 *.o
+*.d
 *.obj
 
 # Precompiled Headers

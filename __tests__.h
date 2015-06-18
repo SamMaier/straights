@@ -50,13 +50,13 @@ public:
 
         Table table;
         table.playCard(cards[3]);
-        std::vector<Card> validMoves = hand.getValidMoves(table.getCards());
+        std::vector<Card> validMoves = hand.getValidMoves(table.getCardsOnBoard());
 
         std::cout << "Board:" << std::endl << table << std::endl;
         std::cout << "Your hand: " << hand << std::endl;
         std::cout << "Valid moves: ";
         std::cout << validMoves[0];
-        for (int i = 1; i < validMoves.size(); i++)
+        for (unsigned int i = 1; i < validMoves.size(); i++)
             std::cout << " " << validMoves[i];
         std::cout << std::endl;
 

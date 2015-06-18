@@ -12,6 +12,7 @@ Deck::Deck() {
             cards_[suit*RANK_COUNT + rank] = Card((Suit) suit, (Rank) rank);
         }
     }
+    Rank r = Rank::ACE;
 }
 
 void Deck::shuffle(int seed){

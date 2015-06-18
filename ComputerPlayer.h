@@ -3,14 +3,15 @@
 
 #include "Player.h"
 #include "hand.h"
+#include "table.h"
 #include "Command.h"
 
 class ComputerPlayer : public Player {
 public:
     ComputerPlayer(int playerNumber);
-    Command& getPlay(const Table&) const;
+    Command getPlay(const Table&);
 
 private:
-}
+};
 
 #endif
