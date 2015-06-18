@@ -10,7 +10,6 @@
 
 class TextView : public View{
 public:
-    TextView() {}
     void alertPlayedCard(Player* player, Card card);
     void alertDiscardCard(Player* player, Card card);
     void alertRagequit(Player* player);
