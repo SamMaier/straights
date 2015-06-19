@@ -73,22 +73,24 @@ void Game::disablePlayer() {
     view_->alertRagequit(&players_[currentPlayer_]);
 }
 
+void endRoundSummary(std::vector<Player>& players, View* view) {
+    for (Player& player : players) {
+        int oldScore = player.getScore();
+        int discardScore = 0;
+        for (Card discardedCard : *(player.getDiscards()))
+            discardScore += discardedCard.getRank() + 1;
+        player.addScore(discardScore);
+        view->alertEmptyHand(&player, oldScore);
+    }
+}
+
 
 void Game::nextTurn() {
-    if (hands_[currentPlayer_].isEmpty()) {
-        Player* player = &players_[currentPlayer_];
-        int oldScore = player->getScore();
-        int discardScore = 0;
-        for (Card discardedCard : *(player->getDiscards()))
-            discardScore += discardedCard.getRank() + 1;
-        player->addScore(discardScore);
-        view_->alertEmptyHand(player, oldScore);
-    }
-
-
     currentPlayer_ = (currentPlayer_ + 1) % NUM_PLAYERS;
-    // if the next player is already empty, we've gone through every player's cards
+    // If the next player is already empty, we've gone through every player's cards
+    // since every player loses 1 card each turn
     if (hands_[currentPlayer_].isEmpty()) {
+        endRoundSummary(players_, view_);
         Player* maxScorePlayer = getMaxScorePlayer(&players_);
         if (maxScorePlayer->getScore() >= MAX_SCORE) {
             std::vector<Player*> winners = getWinners(&players_);
@@ -135,11 +137,7 @@ void Game::nextRound() {
 bool Game::isValidPlay(const Card& card, const Hand& hand, const Table& table) {
     std::vector<Card> validMoves = hand.getValidMoves(table.getCardsOnBoard());
 
-    if (std::find(validMoves.begin(), validMoves.end(), card) != validMoves.end()) {
-        return true;
-    } else {
-        return false;
-    }
+    return std::find(validMoves.begin(), validMoves.end(), card) != validMoves.end();
 }
 
 void Game::run() {

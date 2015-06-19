@@ -14,7 +14,7 @@ void TextView::alertDiscardCard(const Player *player, Card card) {
 }
 
 void TextView::alertRagequit(const Player* player) {
-    std::cout << "Player " << player->getName() << " ragequits.  A computer will now take over." << std::endl;
+    std::cout << "Player " << player->getName() << " ragequits. A computer will now take over." << std::endl;
 }
 
 void TextView::alertGameEnd(const Player* winner) {
@@ -69,6 +69,6 @@ void TextView::alertIllegalPlay() {
 }
 
 void TextView::alertNoDiscard() {
-    std::cout << "You have a legal play.  You may not discard." << std::endl;
+    std::cout << "You have a legal play. You may not discard." << std::endl;
 }
 
