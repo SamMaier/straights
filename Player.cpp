@@ -42,3 +42,7 @@ const std::vector<Card> * Player::getDiscards() const {
 const Hand *Player::getHand() const {
     return hand_;
 }
+
+Player::~Player() {
+    delete strategy_;
+}

@@ -12,6 +12,7 @@ class View;
 class Player {
 public:
     Player(int playerNumber, bool isHuman, View*);
+    ~Player();
     Command getPlay(const Table&) const;
     std::string getName() const;
     void addScore(int score);

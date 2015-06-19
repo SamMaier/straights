@@ -16,4 +16,6 @@ int main( int argc, char *argv[] ) {
     Game game(seed, view);
     game.run();
 
+    delete view;
+
 }
