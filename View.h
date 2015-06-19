@@ -17,6 +17,7 @@ class Player;
 
 class View {
 public:
+    virtual ~View(){};
     virtual void alertPlayedCard(const Player* player, Card card);
     virtual void alertDiscardCard(const Player* player, Card card);
     virtual void alertRagequit(const Player* player);

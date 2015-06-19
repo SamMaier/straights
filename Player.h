@@ -13,8 +13,11 @@ class Player {
 public:
     Player(int playerNumber, bool isHuman, View*);
     ~Player();
+    Player(const Player&);
+    Player& operator= (const Player&);
     Command getPlay(const Table&) const;
     std::string getName() const;
+    void ragequit();
     void addScore(int score);
     int getScore() const;
     void setHand(const Hand* hand);
@@ -28,6 +31,7 @@ private:
     const Hand* hand_;
     const std::vector<Card>* discards_;
     View* view_;
+    bool isHuman_;
     Strategy* strategy_;
 };
 

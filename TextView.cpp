@@ -5,6 +5,7 @@
 #include <iostream>
 #include "TextView.h"
 
+
 void TextView::alertPlayedCard(const Player *player, Card card) {
     std::cout << "Player " << player->getName() << " plays " << card << "." << std::endl;
 }
