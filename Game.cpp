@@ -70,6 +70,7 @@ void Game::exit() {
 }
 
 void Game::disablePlayer() {
+    players_[currentPlayer_].ragequit();
     view_->alertRagequit(&players_[currentPlayer_]);
 }
 
