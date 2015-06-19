@@ -23,7 +23,7 @@ void TextView::alertGameEnd(const Player* winner) {
 }
 
 void TextView::alertBeginRound(const Player *firstPlayer) {
-    std::cout << "A new round begins.  It's player " << firstPlayer->getName() << "'s turn to play." << std::endl;
+    std::cout << "A new round begins. It's player " << firstPlayer->getName() << "'s turn to play." << std::endl;
 }
 
 void TextView::alertEmptyHand(const Player *player, int oldScore) {

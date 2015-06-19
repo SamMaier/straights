@@ -23,14 +23,13 @@ std::ostream &operator<<(std::ostream &out, const Table &t) {
 
     std::string suits[Suit::SUIT_COUNT] = {"Clubs", "Diamonds", "Hearts", "Spades"};
     for (int suit = 0; suit < Suit::SUIT_COUNT; suit++) {
-        out << suits[suit] << ": ";
+        out << suits[suit] << ":";
         std::set<Card> cards = t.getSuit(suit);
         std::set<Card>::iterator it = cards.begin();
-        if (it != cards.end()) {
-            out << *it;
-            it++;
-            for (; it != cards.end(); ++it)
-                out << " " << *it;
+        for (; it != cards.end(); ++it) {
+            std::string card = it->toString();
+            std::string rank = card.substr(0, card.length() - 1);
+            out << " " << rank;
         }
         if (suit != Suit::SUIT_COUNT - 1)
             out << std::endl;
