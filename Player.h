@@ -23,7 +23,6 @@ public:
 
 private:
     int playerNumber_;
-    bool isHuman_;
     int score_;
     const Hand* hand_;
     const std::vector<Card>* discards_;

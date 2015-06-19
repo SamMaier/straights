@@ -13,34 +13,20 @@ Command HumanStrategy::getPlay(const Hand& hand, const Table& table) const{
     view_->alertLegalPlays(validMoves);
 
     Command c = Command();
+    bool valid = false;
 
     do {
         c = view_->getPlay();
-    } while (!isValidCommand(c, hand, table));
+        if (c.type == Type::PLAY && !Game::isValidPlay(c.card, hand, table)) {
+            view_->alertIllegalPlay();
+        } else if(c.type == Type::DISCARD && validMoves.size() > 0) {
+            view_->alertNoDiscard();
+        } else {
+            valid = true;
+        }
+    } while (!valid);
 
 
     return c;
 
-}
-
-bool HumanStrategy::isValidCommand(const Command& c, const Hand& hand, const Table& table){
-    if (c.type == Type::PLAY || c.type == Type::DISCARD) {
-        if (Game::isValidPlay(c.card, hand, table)) {
-            if (c.type == Type::PLAY) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-        else {
-            if (c.type == Type::PLAY) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-    }
-    return true;
 }

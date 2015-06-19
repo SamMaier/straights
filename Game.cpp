@@ -17,17 +17,20 @@ Player *getMaxScorePlayer(std::vector<Player>* players) {
     return highestPlayer;
 }
 
-
-Player *getMinScorePlayer(std::vector<Player>* players) {
+std::vector<Player*> getWinners(std::vector<Player>* players) {
     int lowestScore = players->at(0).getScore();
-    Player* lowestPlayer = &players->at(0);
+    std::vector<Player*> lowestPlayers;
+    lowestPlayers.push_back(&players->at(0));
     for (Player& player: *players) {
         if (player.getScore() < lowestScore) {
             lowestScore = player.getScore();
-            lowestPlayer = &player;
+            lowestPlayers.clear();
+            lowestPlayers.push_back(&player);
+        } else if (player.getScore() == lowestScore) {
+            lowestPlayers.push_back(&player);
         }
     }
-    return lowestPlayer;
+    return lowestPlayers;
 }
 
 Game::Game(int seed, View* view) {
@@ -88,7 +91,9 @@ void Game::nextTurn() {
     if (hands_[currentPlayer_].isEmpty()) {
         Player* maxScorePlayer = getMaxScorePlayer(&players_);
         if (maxScorePlayer->getScore() >= MAX_SCORE) {
-            view_->alertGameEnd(getMinScorePlayer(&players_));
+            std::vector<Player*> winners = getWinners(&players_);
+            for (Player* player : winners)
+                view_->alertGameEnd(player);
             exit();
             return;
         }
@@ -104,6 +109,7 @@ void Game::nextRound() {
         hands_.push_back(Hand());
         discards_.push_back(std::vector<Card>());
     }
+    deck_.shuffle();
     for (int deckLocation = 0; deckLocation < Deck::NUM_CARDS; deckLocation++) {
         int player = deckLocation / (Deck::NUM_CARDS / NUM_PLAYERS);
         Card card = deck_.getCards()->at(deckLocation);
@@ -121,7 +127,6 @@ void Game::nextRound() {
     table_.clear();
     currentRound_++;
 
-    deck_.shuffle();
 
     view_->alertBeginRound(&players_[currentPlayer_]);
 

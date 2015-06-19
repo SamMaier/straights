@@ -2,7 +2,7 @@
 #include "HumanStrategy.h"
 #include "ComputerStrategy.h"
 
-Player::Player(int playerNumber, bool isHuman, View* view) : playerNumber_(playerNumber), isHuman_(isHuman), score_(0), hand_(NULL), discards_(NULL), view_(view) {
+Player::Player(int playerNumber, bool isHuman, View* view) : playerNumber_(playerNumber), score_(0), hand_(NULL), discards_(NULL), view_(view) {
     if ( isHuman ) {
         strategy_ = new HumanStrategy(view_);
     }
