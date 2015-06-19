@@ -5,12 +5,18 @@ using namespace std;
 
 HumanStrategy::HumanStrategy(View* v) : view_(v){};
 
-Command HumanStrategy::getPlay(const Hand& hand, const Table& table) const{
+
+void HumanStrategy::alertPlay(const Hand& hand, const Table& table) const {
     view_->alertTable(&table);
     view_->alertHand(&hand);
 
     vector<Card> validMoves =  hand.getValidMoves(table.getCardsOnBoard());
     view_->alertLegalPlays(validMoves);
+}
+
+Command HumanStrategy::getPlay(const Hand& hand, const Table& table) const{
+
+    vector<Card> validMoves =  hand.getValidMoves(table.getCardsOnBoard());
 
     Command c = Command();
     bool valid = false;

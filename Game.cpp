@@ -142,8 +142,12 @@ bool Game::isValidPlay(const Card& card, const Hand& hand, const Table& table) {
 }
 
 void Game::run() {
+    bool deckHasPrinted = false;
     while (running_) {
+        if (!deckHasPrinted)
+            players_[currentPlayer_].alertPlay(table_);
         Command command = players_[currentPlayer_].getPlay(table_);
+        deckHasPrinted = false;
         switch (command.type) {
             case Type::PLAY:
                 play(command.card);
@@ -161,6 +165,7 @@ void Game::run() {
                 break;
             case Type::DECK:
                 view_->alertDeck(&deck_);
+                deckHasPrinted = true;
                 break;
             default:
                 break;

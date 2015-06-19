@@ -31,8 +31,8 @@ std::string Card::toString() const{
 
 std::string Card::prettyPrint(std::vector<Card> cards) {
 	if (cards.size() <= 0) return "";
-	std::string output = cards[0].toString();
-	for (unsigned int i = 1; i < cards.size(); i++)
+	std::string output = "";
+	for (unsigned int i = 0; i < cards.size(); i++)
 		output += " " + cards[i].toString();
 	return output;
 }

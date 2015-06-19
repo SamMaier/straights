@@ -28,7 +28,7 @@ void TextView::alertBeginRound(const Player *firstPlayer) {
 
 void TextView::alertEmptyHand(const Player *player, int oldScore) {
     int scoreGained = player->getScore() - oldScore;
-    std::cout << "Player " << player->getName() << "'s discards: " << Card::prettyPrint(*(player->getDiscards())) << std::endl;
+    std::cout << "Player " << player->getName() << "'s discards:" << Card::prettyPrint(*(player->getDiscards())) << std::endl;
     std::cout << "Player " << player->getName() << "'s score: " << oldScore << " + " << scoreGained << " = " << player->getScore() << std::endl;
 
 }
@@ -58,11 +58,11 @@ Command TextView::getPlay() {
 }
 
 void TextView::alertHand(const Hand *hand) {
-    std::cout << "Your hand: " << *hand << std::endl;
+    std::cout << "Your hand:" << *hand << std::endl;
 }
 
 void TextView::alertLegalPlays(std::vector<Card> legalPlays) {
-    std::cout << "Legal plays: " << Card::prettyPrint(legalPlays) << std::endl;
+    std::cout << "Legal plays:" << Card::prettyPrint(legalPlays) << std::endl;
 }
 
 void TextView::alertIllegalPlay() {

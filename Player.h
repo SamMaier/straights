@@ -16,6 +16,7 @@ public:
     Player(const Player&);
     Player& operator= (const Player&);
     Command getPlay(const Table&) const;
+    void alertPlay(const Table&) const;
     std::string getName() const;
     void ragequit();
     void addScore(int score);

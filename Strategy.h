@@ -8,6 +8,7 @@
 class Strategy {
 public:
     virtual Command getPlay(const Hand&, const Table&) const = 0;
+    virtual void alertPlay(const Hand&, const Table&) const {}
     virtual ~Strategy(){};
 };
 

@@ -20,6 +20,10 @@ Command Player::getPlay(const Table& table) const {
     return strategy_->getPlay(*hand_, table);
 }
 
+void Player::alertPlay(const Table& table) const {
+    strategy_->alertPlay(*hand_, table);
+}
+
 int Player::getScore() const {
     return score_;
 }
