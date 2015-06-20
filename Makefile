@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -g -Wall -MMD -std=c++0x
 OBJECTS = Command.o Card.o Table.o Deck.o main.o Hand.o __tests__.o Player.o Game.o Strategy.o HumanStrategy.o ComputerStrategy.o View.o TextView.o
 DEPENDS = ${OBJECTS:.o=.d}
-EXEC = Straights
+EXEC = straights
 
 ${EXEC} : ${OBJECTS}
 	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
