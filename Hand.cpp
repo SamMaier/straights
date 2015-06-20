@@ -26,9 +26,9 @@ std::vector<Card> Hand::getValidMoves(std::set<Card> playedCards) const {
     std::set<Card> allValidMoves;
     for (Card c : playedCards) {
         if (c.getRank() < KING)
-            allValidMoves.insert(Card(c.getSuit(), (Rank)(c.getRank() + 1)));
+            allValidMoves.insert(Card(c.getSuit(), c.getRank() + 1));
         if (c.getRank() > ACE)
-            allValidMoves.insert(Card(c.getSuit(), (Rank)(c.getRank() - 1)));
+            allValidMoves.insert(Card(c.getSuit(), c.getRank() - 1));
     }
     for (Card c : cards_) {
         if (allValidMoves.find(c) != allValidMoves.end() || c.getRank() == SEVEN)

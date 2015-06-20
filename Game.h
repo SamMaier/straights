@@ -39,7 +39,6 @@ private:
     Table table_;
     std::vector<Hand> hands_;
     std::vector<std::vector<Card>> discards_;
-    std::vector<int> scores_;
     std::vector<Player> players_;
     bool running_;
     View* view_;

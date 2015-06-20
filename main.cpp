@@ -1,5 +1,4 @@
 #include <iostream>
-#include "__tests__.h"
 #include "Game.h"
 #include "TextView.h"
 
@@ -17,5 +16,7 @@ int main( int argc, char *argv[] ) {
     game.run();
 
     delete view;
+
+    return 0;
 
 }
