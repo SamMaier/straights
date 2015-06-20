@@ -8,7 +8,6 @@
 Deck::Deck() {
     for (int suit = 0; suit < SUIT_COUNT; suit++) {
         for (int rank = 0; rank < RANK_COUNT; rank++) {
-            //cards_[suit*RANK_COUNT + rank] = Card((Suit) suit, (Rank) rank);
             cards_.push_back(Card((Suit) suit, (Rank) rank));
         }
     }
@@ -35,11 +34,15 @@ void Deck::shuffle(int seed){
 std::ostream &operator<<(std::ostream &out, const Deck &d) {
     int numCards = Deck::NUM_CARDS;
     const std::vector<Card>* cards = d.getCards();
-    for (int i = 0; i < numCards / 13; i++) {
-        for (int j = 0; j < 13; j++) {
-            out << cards->at(i*13 + j) << (j != 12 ? " " : "");
+
+    for (int suit = 0; suit < numCards / 13; suit++) {
+        for (int rank = 0; rank < 13; rank++) {
+            // If the card isn't the last card, add a trailing space before the next card
+            out << cards->at(suit*13 + rank) << (rank != 12 ? " " : "");
         }
-        if (i != numCards / 13 - 1)
+
+        // If the suit is not the very last suit, go to the next line to print the next suit
+        if (suit != numCards / 13 - 1)
             out << std::endl;
     }
 

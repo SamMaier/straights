@@ -6,6 +6,7 @@ using namespace std;
 HumanStrategy::HumanStrategy(View* v) : view_(v){};
 
 
+// Before a play is asked of a user, give them information about the state of the game
 void HumanStrategy::alertPlay(const Hand& hand, const Table& table) const {
     view_->alertTable(&table);
     view_->alertHand(&hand);
@@ -31,7 +32,6 @@ Command HumanStrategy::getPlay(const Hand& hand, const Table& table) const{
             valid = true;
         }
     } while (!valid);
-
 
     return c;
 

@@ -18,7 +18,7 @@ public:
     Command getPlay(const Table&) const;
     void alertPlay(const Table&) const;
     std::string getName() const;
-    void ragequit();
+    void ragequit(); // Disable a human player and set it to a computer
     void addScore(int score);
     int getScore() const;
     void setHand(const Hand* hand);

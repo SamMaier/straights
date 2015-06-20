@@ -23,13 +23,17 @@ std::vector<Card> Hand::getValidMoves(std::set<Card> playedCards) const {
         return validMoves;
     }
 
+    // Any card where there is a card on the table of adjacent rank and equal suit is a valid suit
     std::set<Card> allValidMoves;
     for (Card c : playedCards) {
+        // Avoid adding a rank above or below the highest or lowest cards respectively
         if (c.getRank() < KING)
-            allValidMoves.insert(Card(c.getSuit(), c.getRank() + 1));
+            allValidMoves.insert(Card(c.getSuit(), (Rank)(c.getRank() + 1)));
         if (c.getRank() > ACE)
-            allValidMoves.insert(Card(c.getSuit(), c.getRank() - 1));
+            allValidMoves.insert(Card(c.getSuit(), (Rank)(c.getRank() - 1)));
     }
+
+    // A seven may be played at any point in the game
     for (Card c : cards_) {
         if (allValidMoves.find(c) != allValidMoves.end() || c.getRank() == SEVEN)
             validMoves.push_back(c);

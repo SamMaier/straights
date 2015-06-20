@@ -34,7 +34,6 @@ private:
     void nextTurn();
     void nextRound();
     int currentPlayer_;
-    int currentRound_;
     Deck deck_;
     Table table_;
     std::vector<Hand> hands_;
@@ -42,7 +41,7 @@ private:
     std::vector<Player> players_;
     bool running_;
     View* view_;
-    int seed_;
+    int seed_; // A seed for the sorting algoirthm's randomization
 
 };
 

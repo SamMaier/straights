@@ -20,7 +20,8 @@ Player *getMaxScorePlayer(std::vector<Player>* players) {
 std::vector<Player*> getWinners(std::vector<Player>* players) {
     int lowestScore = players->at(0).getScore();
     std::vector<Player*> lowestPlayers;
-    lowestPlayers.push_back(&players->at(0));
+
+    // The players with the lowest total score are winners
     for (Player& player: *players) {
         if (player.getScore() < lowestScore) {
             lowestScore = player.getScore();
@@ -35,10 +36,9 @@ std::vector<Player*> getWinners(std::vector<Player>* players) {
 
 Game::Game(int seed, View* view) {
     for (int player = 0; player < NUM_PLAYERS; player++) {
-        bool human = view->checkIfHuman(std::to_string(player + 1));
-        players_.push_back(Player(player + 1, human, view));
+        bool isHuman = view->checkIfHuman(std::to_string(player + 1));
+        players_.push_back(Player(player + 1, isHuman, view));
     }
-    currentRound_ = -1;
     running_ = true;
     view_ = view;
     seed_ = seed;
@@ -106,30 +106,38 @@ void Game::nextTurn() {
 
 void Game::nextRound() {
 
+    // Initialize all hands and discard piles to empty
     hands_.clear();
     discards_.clear();
     for (int player = 0; player < NUM_PLAYERS; player++) {
         hands_.push_back(Hand());
         discards_.push_back(std::vector<Card>());
     }
+
     deck_.shuffle();
+
+    // Cards assigned as all p players receive the same n number of cards where player 0
+    // receives the first n cards, player 1 receives the next n cards, etc.
     for (int deckLocation = 0; deckLocation < Deck::NUM_CARDS; deckLocation++) {
+
+        // The player for each card can now be found easily by dividing by the number of cards per player
         int player = deckLocation / (Deck::NUM_CARDS / NUM_PLAYERS);
+
         Card card = deck_.getCards()->at(deckLocation);
         hands_[player].addCard(card);
 
+        // The player with the Seven of Spades is the player to go first
         if (card.getRank() == Rank::SEVEN && card.getSuit() == Suit::SPADE)
             currentPlayer_ = player;
     }
 
+    // Let the player know of their hand and discard piles
     for (int player = 0; player < NUM_PLAYERS; player++) {
         players_[player].setHand(&hands_[player]);
         players_[player].setDiscards(&discards_[player]);
     }
 
     table_.clear();
-    currentRound_++;
-
 
     view_->alertBeginRound(&players_[currentPlayer_]);
 
@@ -142,12 +150,19 @@ bool Game::isValidPlay(const Card& card, const Hand& hand, const Table& table) {
 }
 
 void Game::run() {
+
+    // Keep track of if the last command was the deck being printed
+    // to avoid the players acting as if they hadn't just asked for a play
+    // ex: a Human player strategy will print the current table when it first asks for a play
     bool deckHasPrinted = false;
     while (running_) {
+
         if (!deckHasPrinted)
             players_[currentPlayer_].alertPlay(table_);
         Command command = players_[currentPlayer_].getPlay(table_);
         deckHasPrinted = false;
+
+        // A turn is only consumed if a player Plays or Discards a card
         switch (command.type) {
             case Type::PLAY:
                 play(command.card);
