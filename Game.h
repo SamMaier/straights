@@ -18,6 +18,7 @@ class View;
 class Player;
 
 class Game {
+friend class GameController;
 public:
     Game(int seed = 0, View* view = NULL);
     void run();
