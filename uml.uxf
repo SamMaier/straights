@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>972</x>
-      <y>450</y>
+      <x>1089</x>
+      <y>414</y>
       <w>126</w>
       <h>36</h>
     </coordinates>
@@ -15,8 +15,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1026</x>
-      <y>675</y>
+      <x>1143</x>
+      <y>639</y>
       <w>162</w>
       <h>45</h>
     </coordinates>
@@ -27,8 +27,8 @@ Suit</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1026</x>
-      <y>621</y>
+      <x>1143</x>
+      <y>585</y>
       <w>162</w>
       <h>45</h>
     </coordinates>
@@ -39,8 +39,8 @@ Rank</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>981</x>
-      <y>549</y>
+      <x>1098</x>
+      <y>513</y>
       <w>108</w>
       <h>27</h>
     </coordinates>
@@ -50,8 +50,8 @@ Rank</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1161</x>
-      <y>360</y>
+      <x>1278</x>
+      <y>324</y>
       <w>189</w>
       <h>27</h>
     </coordinates>
@@ -61,8 +61,8 @@ Rank</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1215</x>
-      <y>612</y>
+      <x>1332</x>
+      <y>576</y>
       <w>99</w>
       <h>36</h>
     </coordinates>
@@ -72,8 +72,8 @@ Rank</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1206</x>
-      <y>675</y>
+      <x>1323</x>
+      <y>639</y>
       <w>117</w>
       <h>45</h>
     </coordinates>
@@ -84,8 +84,8 @@ Type</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1179</x>
-      <y>513</y>
+      <x>1296</x>
+      <y>477</y>
       <w>90</w>
       <h>27</h>
     </coordinates>
@@ -95,8 +95,8 @@ Type</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>144</x>
-      <y>657</y>
+      <x>162</x>
+      <y>603</y>
       <w>333</w>
       <h>54</h>
     </coordinates>
@@ -109,24 +109,25 @@ Type</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>144</x>
-      <y>450</y>
+      <x>162</x>
+      <y>396</y>
       <w>333</w>
-      <h>81</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>HumanStrategy
 --
 -view_: View*
 --
 +HumanStrategy(View*)
++alertPlay(const Hand&amp;, const Table&amp;) const: void
 +getPlay(const Hand&amp;, const Table&amp;) const: Command</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>846</x>
-      <y>648</y>
+      <x>963</x>
+      <y>612</y>
       <w>81</w>
       <h>27</h>
     </coordinates>
@@ -136,24 +137,25 @@ Type</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>144</x>
-      <y>567</y>
+      <x>162</x>
+      <y>513</y>
       <w>333</w>
-      <h>54</h>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Strategy
 --
 --
++alertPlay(const Hand&amp;, const Table&amp;) const: void
 /+getPlay(const Hand&amp;, const Table&amp;) const: Command/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>513</x>
-      <y>432</y>
+      <x>630</x>
+      <y>378</y>
       <w>297</w>
-      <h>279</h>
+      <h>351</h>
     </coordinates>
     <panel_attributes>Player
 --
@@ -165,22 +167,27 @@ Type</panel_attributes>
 -view_: View*
 -strategy_: Strategy*
 --
-+Player(int playerNumber, bool isHuman, View*)
-+getPlay(const Table&amp;)
-+getName(): string
-+addScore(int score): void
-+getScore(): int
-+setHand(const Hand* hand): void
-+setDiscards(const vector&lt;Card&gt;* discards): void
-+getDiscards(): const vector&lt;Card&gt;*
-+getHand(): const Hand*</panel_attributes>
++Player(playerNumber: int, isHuman: bool, View*)
++~Player()
++Player(const Player&amp;)
++operator= (const Table&amp;) const: Player&amp;
++alertPlay(const Table&amp;) const: void
++getPlay(const Table&amp;) const: Command
++getName() const: string
++addScore(score: int): void
++getScore() const: int
++setHand(hand: const Hand*): void
++setDiscards(discards: const vector&lt;Card&gt;*): void
++getDiscards() const: const vector&lt;Card&gt;*
++getHand() const: const Hand*
++ragequit(): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1179</x>
-      <y>441</y>
+      <x>1296</x>
+      <y>405</y>
       <w>90</w>
       <h>36</h>
     </coordinates>
@@ -190,8 +197,8 @@ Type</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>801</x>
-      <y>351</y>
+      <x>918</x>
+      <y>315</y>
       <w>117</w>
       <h>36</h>
     </coordinates>
@@ -202,8 +209,8 @@ Type</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>981</x>
-      <y>351</y>
+      <x>1098</x>
+      <y>315</y>
       <w>108</w>
       <h>36</h>
     </coordinates>
@@ -213,8 +220,8 @@ Type</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>909</x>
-      <y>360</y>
+      <x>1026</x>
+      <y>324</y>
       <w>90</w>
       <h>27</h>
     </coordinates>
@@ -224,8 +231,8 @@ Type</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1026</x>
-      <y>378</y>
+      <x>1143</x>
+      <y>342</y>
       <w>27</w>
       <h>90</h>
     </coordinates>
@@ -235,21 +242,21 @@ Type</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>873</x>
-      <y>477</y>
+      <x>990</x>
+      <y>441</y>
       <w>144</w>
       <h>189</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-m1=NUM_PLAYER
+m1=4
 </panel_attributes>
     <additional_attributes>10.0;190.0;10.0;50.0;140.0;50.0;140.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>801</x>
-      <y>459</y>
+      <x>918</x>
+      <y>423</y>
       <w>189</w>
       <h>27</h>
     </coordinates>
@@ -259,41 +266,42 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>297</x>
-      <y>522</y>
+      <x>315</x>
+      <y>477</y>
       <w>27</w>
-      <h>63</h>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>297</x>
-      <y>612</y>
+      <x>315</x>
+      <y>567</y>
       <w>27</w>
-      <h>63</h>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>468</x>
-      <y>585</y>
-      <w>63</w>
-      <h>27</h>
+      <x>486</x>
+      <y>531</y>
+      <w>162</w>
+      <h>36</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
+m1=strategy_</panel_attributes>
+    <additional_attributes>10.0;10.0;160.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1251</x>
-      <y>639</y>
+      <x>1368</x>
+      <y>603</y>
       <w>27</w>
       <h>54</h>
     </coordinates>
@@ -303,8 +311,8 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1062</x>
-      <y>567</y>
+      <x>1179</x>
+      <y>531</y>
       <w>216</w>
       <h>63</h>
     </coordinates>
@@ -314,8 +322,8 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>990</x>
-      <y>567</y>
+      <x>1107</x>
+      <y>531</y>
       <w>54</w>
       <h>153</h>
     </coordinates>
@@ -325,8 +333,8 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1035</x>
-      <y>567</y>
+      <x>1152</x>
+      <y>531</y>
       <w>27</w>
       <h>72</h>
     </coordinates>
@@ -336,19 +344,20 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1062</x>
-      <y>513</y>
+      <x>1179</x>
+      <y>477</y>
       <w>135</w>
       <h>54</h>
     </coordinates>
-    <panel_attributes>lt=-&gt;&gt;&gt;&gt;</panel_attributes>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;
+m1=52</panel_attributes>
     <additional_attributes>10.0;40.0;10.0;10.0;130.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1026</x>
-      <y>477</y>
+      <x>1143</x>
+      <y>441</y>
       <w>27</w>
       <h>90</h>
     </coordinates>
@@ -358,19 +367,20 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
-      <y>450</y>
+      <x>1197</x>
+      <y>414</y>
       <w>243</w>
-      <h>126</h>
+      <h>135</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
+    <panel_attributes>lt=-&gt;&gt;&gt;&gt;
+m1=*</panel_attributes>
     <additional_attributes>10.0;120.0;250.0;120.0;250.0;10.0;210.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1062</x>
-      <y>477</y>
+      <x>1179</x>
+      <y>441</y>
       <w>180</w>
       <h>54</h>
     </coordinates>
@@ -380,8 +390,8 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1089</x>
-      <y>450</y>
+      <x>1206</x>
+      <y>414</y>
       <w>108</w>
       <h>27</h>
     </coordinates>
@@ -391,20 +401,20 @@ m1=NUM_PLAYER
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>918</x>
-      <y>540</y>
+      <x>1035</x>
+      <y>513</y>
       <w>81</w>
-      <h>144</h>
+      <h>135</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-r2=cards_</panel_attributes>
-    <additional_attributes>10.0;140.0;50.0;140.0;50.0;20.0;70.0;20.0</additional_attributes>
+m2=0 ..13</panel_attributes>
+    <additional_attributes>10.0;130.0;50.0;130.0;50.0;10.0;70.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
-      <y>360</y>
+      <x>1197</x>
+      <y>324</y>
       <w>99</w>
       <h>27</h>
     </coordinates>
@@ -414,8 +424,8 @@ r2=cards_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1062</x>
-      <y>378</y>
+      <x>1179</x>
+      <y>342</y>
       <w>153</w>
       <h>90</h>
     </coordinates>
@@ -425,15 +435,12 @@ r2=cards_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
-      <y>153</y>
-      <w>171</w>
-      <h>45</h>
+      <x>918</x>
+      <y>342</y>
+      <w>234</w>
+      <h>63</h>
     </coordinates>
-    <panel_attributes>lt=-
-m1=0..n
-m2=0..1
-teaches to &gt;</panel_attributes>
-    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>240.0;10.0;240.0;50.0;10.0;50.0</additional_attributes>
   </element>
 </diagram>
