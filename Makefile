@@ -4,8 +4,8 @@ OBJECTS = src/Command.o src/Card.o src/Table.o src/Deck.o src/main.o src/Hand.o 
 DEPENDS = ${OBJECTS:.o=.d}
 EXEC = straights
 
-${EXEC} : $(OBJECTS)
-	${CXX} ${CXXFLAGS} $(OBJECTS) -o ${EXEC}
+${EXEC} : ${OBJECTS}
+	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
 
 clean :
 	rm -rf ${DEPENDS} ${OBJECTS} ${EXEC}

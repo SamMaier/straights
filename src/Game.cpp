@@ -114,7 +114,7 @@ void Game::nextRound() {
         discards_.push_back(std::vector<Card>());
     }
 
-    deck_.shuffle();
+    deck_.shuffle(seed_);
 
     // Cards assigned as all p players receive the same n number of cards where player 0
     // receives the first n cards, player 1 receives the next n cards, etc.
