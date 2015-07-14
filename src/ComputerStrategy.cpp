@@ -5,7 +5,7 @@ using namespace std;
 
 Command ComputerStrategy::getPlay(const Hand& hand, const Table& table) const{
 
-    vector<Card> validMoves =  hand.getValidMoves(table.getCardsOnBoard());
+    vector<Card> validMoves =  hand.getValidMoves(table.getCards());
 
     Command c = Command();
 

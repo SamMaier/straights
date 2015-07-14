@@ -10,7 +10,6 @@
 
 class Table {
 public:
-    std::set<Card> getCardsOnBoard() const;
     void playCard(Card card);
     void clear() { cards_.clear(); }
     std::set<Card> getCards() const;

@@ -74,12 +74,23 @@ void Game::exit() {
 
 void Game::disablePlayer() {
     players_[currentPlayer_].ragequit();
+    playComputerTurn();
+    nextTurn();
     notify();
+}
+
+void Game::playComputerTurn() {
+    Command cmd = players_[currentPlayer_].getPlay(table_);
+    switch (cmd.type) {
+        case PLAY: play(cmd.card); break;
+        case DISCARD: discard(cmd.card); break;
+    }
 }
 
 
 void Game::nextTurn() {
     currentPlayer_ = (currentPlayer_ + 1) % NUM_PLAYERS;
+
     // If the next player is already empty, we've gone through every player's cards
     // since every player loses 1 card each turn
     if (hands_[currentPlayer_].isEmpty()) {
@@ -99,6 +110,12 @@ void Game::nextTurn() {
             return;
         }
         nextRound();
+    }
+
+
+    if (!players_[currentPlayer_].isHuman()) {
+        playComputerTurn();
+        nextTurn();
     }
 
     notify();
@@ -143,7 +160,7 @@ void Game::nextRound() {
 }
 
 bool Game::isValidPlay(const Card& card, const Hand& hand, const Table& table) {
-    std::vector<Card> validMoves = hand.getValidMoves(table.getCardsOnBoard());
+    std::vector<Card> validMoves = hand.getValidMoves(table.getCards());
 
     return std::find(validMoves.begin(), validMoves.end(), card) != validMoves.end();
 }

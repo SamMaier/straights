@@ -4,10 +4,6 @@
 
 #include "Table.h"
 
-std::set<Card> Table::getCardsOnBoard() const {
-    return cards_;
-}
-
 // 0: Clubs, 1: Diamonds, 2: Hearts, 3: Spades
 std::set<Card> Table::getSuit(int suit) const{
     std::set<Card> cards;

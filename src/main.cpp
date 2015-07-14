@@ -2,21 +2,28 @@
 #include "Game.h"
 #include "TextView.h"
 #include <gtkmm.h>
+#include "GtkView.h"
 
 
-class SampleWindow : public Gtk::Window {
-public:
-    SampleWindow(): m_button("Sample") {
-        set_border_width(10);
-        m_button.signal_clicked().connect(sigc::mem_fun(*this, &SampleWindow::onButtonClicked));
-        add(m_button);
-        m_button.show();
+
+void printCardSet(std::set<Card> cardSet) {
+    std::vector<Card> cards;
+    std::copy(cardSet.begin(), cardSet.end(), std::back_inserter(cards));
+    std::cout << "Cards: " << Card::prettyPrint(cards) << std::endl;
+}
+
+void printState(Game* game) {
+
+    const std::vector<Player>* players = game->getPlayers();
+    for (const Player & player : *players) {
+        std::cout << "Player " << player.getName()  << " (" << (player.isHuman() ? "Human" : "Computer") << ")" << std::endl;
+        std::cout << "      Score: " << player.getScore() << std::endl;
+        std::cout << "      Cards: " << Card::prettyPrint(player.getHand()->getCards()) << std::endl;
     }
-    virtual ~SampleWindow() {};
-protected:
-    virtual void onButtonClicked() { std::cout << "Button Clicked" << std::endl; };
-    Gtk::Button m_button;
-};
+
+    std::cout << "Cards on the table:" << std::endl;
+    std::cout << *game->getTable() << std::endl;
+}
 
 int main( int argc, char *argv[] ) {
 
@@ -27,23 +34,23 @@ int main( int argc, char *argv[] ) {
 
 
     Game* game = new Game(seed);
-    GameController* gc = new GameController(game);
+     GameController* gc = new GameController(game);
 
-    std::cout << (game->getPlayers()->at(3).isHuman() ? "Human" : "Not Human") << std::endl;
-    std::cout << game->getCurrentPlayer() << std::endl;
     gc->disablePlayer();
-    std::cout << (game->getPlayers()->at(3).isHuman() ? "Human" : "Not Human") << std::endl;
-    std::cout << game->getCurrentPlayer() << std::endl;
+    gc->disablePlayer();
+    gc->disablePlayer();
+    printState(game);
 
 
 
 
 
 
-//    Gtk::Main kit(&argc,&argv);
-//    SampleWindow window;
+
+//   Gtk::Main kit(&argc,&argv);
+//   GtkView window(game);
 //
-//    Gtk::Main::run( window);
+//   Gtk::Main::run( window);
 
 
 

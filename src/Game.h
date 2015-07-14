@@ -29,7 +29,7 @@ public:
     static const int MAX_SCORE = 80;
     static bool isValidPlay(const Card& card, const Hand& hand, const Table& table);
     std::vector<Player*> getWinners();
-    int getCurrentPlayer () const { return currentPlayer_; }
+    const Player* getCurrentPlayer () const { return &players_[currentPlayer_]; }
 private:
     void play(Card card);
     void discard(Card card);
@@ -45,6 +45,7 @@ private:
     std::vector<Player> players_;
     bool running_;
     int seed_; // A seed for the sorting algoirthm's randomization
+    void playComputerTurn();
     std::vector<Command> actions_;
 
 };
