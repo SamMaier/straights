@@ -12,33 +12,24 @@
 #include "Hand.h"
 #include "Table.h"
 #include "Player.h"
-#include "View.h"
 #include "Subject.h"
 
 class View;
 class Player;
 
-enum Action {
-    PLAY,
-    DISCARD,
-    RAGEQUIT
-};
 
-struct GameAction {
-    Action action_;
-    Card card_;
-};
-
-class Game : public Subject{
+class Game : public Subject {
 friend class GameController;
 public:
-    Game(int seed = 0, View* view = NULL);
-    void run();
+    Game(int seed = 0);
     const Deck* getDeck() const;
     const Table* getTable() const;
+    const std::vector<Player>* getPlayers() const;
     static const int NUM_PLAYERS = 4;
     static const int MAX_SCORE = 80;
     static bool isValidPlay(const Card& card, const Hand& hand, const Table& table);
+    std::vector<Player*> getWinners();
+    int getCurrentPlayer () const { return currentPlayer_; }
 private:
     void play(Card card);
     void discard(Card card);
@@ -53,9 +44,8 @@ private:
     std::vector<std::vector<Card>> discards_;
     std::vector<Player> players_;
     bool running_;
-    View* view_;
     int seed_; // A seed for the sorting algoirthm's randomization
-    std::vector<GameAction> actions_;
+    std::vector<Command> actions_;
 
 };
 

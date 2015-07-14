@@ -11,7 +11,7 @@ class View;
 
 class Player {
 public:
-    Player(int playerNumber, bool isHuman, View*);
+    Player(int playerNumber, bool isHuman);
     ~Player();
     Player(const Player&);
     Player& operator= (const Player&);
@@ -23,6 +23,7 @@ public:
     int getScore() const;
     void setHand(const Hand* hand);
     void setDiscards(const std::vector<Card>* discards);
+    bool isHuman() const { return isHuman_; }
     const std::vector<Card>* getDiscards() const;
     const Hand* getHand() const;
 

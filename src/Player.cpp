@@ -2,10 +2,10 @@
 #include "HumanStrategy.h"
 #include "ComputerStrategy.h"
 
-Player::Player(int playerNumber, bool isHuman, View* view) : playerNumber_(playerNumber), score_(0),
-    hand_(NULL), discards_(NULL), view_(view), isHuman_(isHuman) {
+Player::Player(int playerNumber, bool isHuman) : playerNumber_(playerNumber), score_(0),
+    hand_(NULL), discards_(NULL), isHuman_(isHuman) {
     if ( isHuman_ ) {
-        strategy_ = new HumanStrategy(view_);
+        strategy_ = new HumanStrategy();
     }
     else {
         strategy_ = new ComputerStrategy();
@@ -61,9 +61,9 @@ Player::~Player() {
 }
 
 Player::Player(const Player& other) : playerNumber_(other.playerNumber_), score_(other.score_),
-    hand_(other.hand_), discards_(other.discards_), view_(other.view_), isHuman_(other.isHuman_) {
+    hand_(other.hand_), discards_(other.discards_), isHuman_(other.isHuman_) {
     if ( isHuman_ ) {
-        strategy_ = new HumanStrategy(view_);
+        strategy_ = new HumanStrategy();
     }
     else {
         strategy_ = new ComputerStrategy();

@@ -6,8 +6,7 @@
 #define STRAIGHTS_SUBJECT_H
 
 
-#include<vector>
-#include "View.h"
+#include <set>
 #include "Observer.h"
 
 class Subject {

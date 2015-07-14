@@ -17,12 +17,12 @@ Player *getMaxScorePlayer(std::vector<Player>* players) {
     return highestPlayer;
 }
 
-std::vector<Player*> getWinners(std::vector<Player>* players) {
-    int lowestScore = players->at(0).getScore();
+std::vector<Player*> Game::getWinners() {
+    int lowestScore = players_.at(0).getScore();
     std::vector<Player*> lowestPlayers;
 
     // The players with the lowest total score are winners
-    for (Player& player: *players) {
+    for (Player& player: players_) {
         if (player.getScore() < lowestScore) {
             lowestScore = player.getScore();
             lowestPlayers.clear();
@@ -34,13 +34,11 @@ std::vector<Player*> getWinners(std::vector<Player>* players) {
     return lowestPlayers;
 }
 
-Game::Game(int seed, View* view) {
+Game::Game(int seed) {
     for (int player = 0; player < NUM_PLAYERS; player++) {
-        bool isHuman = view->checkIfHuman(std::to_string(player + 1));
-        players_.push_back(Player(player + 1, isHuman, view));
+        players_.push_back(Player(player + 1, true));
     }
     running_ = true;
-    view_ = view;
     seed_ = seed;
     nextRound();
 }
@@ -53,36 +51,30 @@ const Table *Game::getTable() const{
     return &table_;
 }
 
+const std::vector<Player>* Game::getPlayers() const {
+    return &players_;
+};
+
 void Game::play(Card card) {
     hands_[currentPlayer_].removeCard(card);
     table_.playCard(card);
-    view_->alertPlayedCard(&players_[currentPlayer_], card);
+    notify();
 }
 
 void Game::discard(Card card) {
     hands_[currentPlayer_].removeCard(card);
     discards_[currentPlayer_].push_back(card);
-    view_->alertDiscardCard(&players_[currentPlayer_], card);
+    notify();
 }
 
 void Game::exit() {
     running_ = false;
+    notify();
 }
 
 void Game::disablePlayer() {
     players_[currentPlayer_].ragequit();
-    view_->alertRagequit(&players_[currentPlayer_]);
-}
-
-void endRoundSummary(std::vector<Player>& players, View* view) {
-    for (Player& player : players) {
-        int oldScore = player.getScore();
-        int discardScore = 0;
-        for (Card discardedCard : *(player.getDiscards()))
-            discardScore += discardedCard.getRank() + 1;
-        player.addScore(discardScore);
-        view->alertEmptyHand(&player, oldScore);
-    }
+    notify();
 }
 
 
@@ -91,17 +83,25 @@ void Game::nextTurn() {
     // If the next player is already empty, we've gone through every player's cards
     // since every player loses 1 card each turn
     if (hands_[currentPlayer_].isEmpty()) {
-        endRoundSummary(players_, view_);
+
+        for (Player& player : players_) {
+            int oldScore = player.getScore();
+            int discardScore = 0;
+            for (Card discardedCard : *(player.getDiscards()))
+                discardScore += discardedCard.getRank() + 1;
+            player.addScore(discardScore);
+            notify();
+        }
+
         Player* maxScorePlayer = getMaxScorePlayer(&players_);
         if (maxScorePlayer->getScore() >= MAX_SCORE) {
-            std::vector<Player*> winners = getWinners(&players_);
-            for (Player* player : winners)
-                view_->alertGameEnd(player);
             exit();
             return;
         }
         nextRound();
     }
+
+    notify();
 }
 
 void Game::nextRound() {
@@ -138,8 +138,7 @@ void Game::nextRound() {
     }
 
     table_.clear();
-
-    view_->alertBeginRound(&players_[currentPlayer_]);
+    notify();
 
 }
 
@@ -147,45 +146,6 @@ bool Game::isValidPlay(const Card& card, const Hand& hand, const Table& table) {
     std::vector<Card> validMoves = hand.getValidMoves(table.getCardsOnBoard());
 
     return std::find(validMoves.begin(), validMoves.end(), card) != validMoves.end();
-}
-
-void Game::run() {
-
-    // Keep track of if the last command was the deck being printed
-    // to avoid the players acting as if they hadn't just asked for a play
-    // ex: a Human player strategy will print the current table when it first asks for a play
-    bool deckHasPrinted = false;
-    while (running_) {
-
-        if (!deckHasPrinted)
-            players_[currentPlayer_].alertPlay(table_);
-        Command command = players_[currentPlayer_].getPlay(table_);
-        deckHasPrinted = false;
-
-        // A turn is only consumed if a player Plays or Discards a card
-        switch (command.type) {
-            case Type::PLAY:
-                play(command.card);
-                nextTurn();
-                break;
-            case Type::DISCARD:
-                discard(command.card);
-                nextTurn();
-                break;
-            case Type::RAGEQUIT:
-                disablePlayer();
-                break;
-            case Type::QUIT:
-                exit();
-                break;
-            case Type::DECK:
-                view_->alertDeck(&deck_);
-                deckHasPrinted = true;
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 

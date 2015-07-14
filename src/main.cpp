@@ -25,17 +25,25 @@ int main( int argc, char *argv[] ) {
         seed = atoi(argv[1]);
     }
 
-//    View* view = new TextView();
-//
-//    Game game(seed, view);
-//    game.run();
-//
-//    delete view;
 
-    Gtk::Main kit(&argc,&argv);
-    SampleWindow window;
+    Game* game = new Game(seed);
+    GameController* gc = new GameController(game);
 
-    Gtk::Main::run( window);
+    std::cout << (game->getPlayers()->at(3).isHuman() ? "Human" : "Not Human") << std::endl;
+    std::cout << game->getCurrentPlayer() << std::endl;
+    gc->disablePlayer();
+    std::cout << (game->getPlayers()->at(3).isHuman() ? "Human" : "Not Human") << std::endl;
+    std::cout << game->getCurrentPlayer() << std::endl;
+
+
+
+
+
+
+//    Gtk::Main kit(&argc,&argv);
+//    SampleWindow window;
+//
+//    Gtk::Main::run( window);
 
 
 
