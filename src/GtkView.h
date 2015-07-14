@@ -9,17 +9,39 @@
 #include "gtkmm.h"
 #include <iostream>
 #include "Game.h"
+#include "ImageFactory.h"
+
+
+struct GameState {
+    std::string currentPlayer;
+    std::vector<Card> hand;
+    std::set<Card> cardsOnTable;
+    std::vector<Card> validMoves;
+    struct PlayerInfo {
+        PlayerInfo(std::string name, int score, int discards);
+        std::string name;
+        int score;
+        int discards;
+    };
+    std::vector<PlayerInfo> playerInfo;
+
+
+};
 
 class GtkView : public Gtk::Window, public Observer {
 public:
     GtkView(Game*);
     virtual ~GtkView() {};
-    void update() {};
+    void update();
 protected:
-    virtual void onButtonClicked();
-    Gtk::Button m_button;
     Game* game_;
+    GameState gameState_;
+    virtual void onButtonClicked();
 
+    Gtk::Button button_;
+    Gtk::HBox handBox_;
+    Gtk::Frame frame_;
+    ImageFactory images_;
 
 };
 

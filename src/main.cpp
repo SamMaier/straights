@@ -32,7 +32,6 @@ int main( int argc, char *argv[] ) {
         seed = atoi(argv[1]);
     }
 
-
     Game* game = new Game(seed);
      GameController* gc = new GameController(game);
 
@@ -41,19 +40,10 @@ int main( int argc, char *argv[] ) {
     gc->disablePlayer();
     printState(game);
 
-
-
-
-
-
-
 //   Gtk::Main kit(&argc,&argv);
 //   GtkView window(game);
 //
 //   Gtk::Main::run( window);
-
-
-
 
     return 0;
 
