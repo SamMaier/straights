@@ -6,18 +6,6 @@
 #include "TextView.h"
 
 
-
-
-TextView::TextView(GameController* gc, Game* g) : controller_(gc), game_(g){
-
-}
-
-void TextView::run() {
-
-}
-
-
-
 void TextView::alertPlayedCard(const Player *player, Card card) {
     std::cout << "Player " << player->getName() << " plays " << card << "." << std::endl;
 }
