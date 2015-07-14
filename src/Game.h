@@ -13,11 +13,23 @@
 #include "Table.h"
 #include "Player.h"
 #include "View.h"
+#include "Subject.h"
 
 class View;
 class Player;
 
-class Game {
+enum Action {
+    PLAY,
+    DISCARD,
+    RAGEQUIT
+};
+
+struct GameAction {
+    Action action_;
+    Card card_;
+};
+
+class Game : public Subject{
 friend class GameController;
 public:
     Game(int seed = 0, View* view = NULL);
@@ -43,6 +55,7 @@ private:
     bool running_;
     View* view_;
     int seed_; // A seed for the sorting algoirthm's randomization
+    std::vector<GameAction> actions_;
 
 };
 

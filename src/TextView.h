@@ -7,8 +7,10 @@
 
 
 #include "View.h"
+#include "Observer.h"
+#include "GameController.h"
 
-class TextView : public View{
+class TextView : public View, public Observer{
 public:
     void alertPlayedCard(const Player* player, Card card);
     void alertDiscardCard(const Player* player, Card card);

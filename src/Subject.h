@@ -8,16 +8,18 @@
 
 #include<vector>
 #include "View.h"
+#include "Observer.h"
 
 class Subject {
 
 public:
-   void subscribe(View*);
-   void unsubscribe(View*);
+   void subscribe( Observer*);
+   void unsubscribe( Observer*);
+protected:
+   void notify();
 
 private:
-   std::vector<View*> observers;
-
+   std::set< Observer* > observers_;
 };
 
 
