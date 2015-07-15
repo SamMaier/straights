@@ -13,6 +13,11 @@
 #include "GameController.h"
 
 
+
+
+const int HAND_SIZE = RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS;
+const int TABLE_SIZE = RANK_COUNT * SUIT_COUNT;
+
 struct GameState {
     std::string currentPlayer;
     std::vector<Card> hand;
@@ -42,16 +47,17 @@ protected:
     void queryModel();
     void clearHandButtons();
     void setHandButtons();
+    void clearTableImages();
     void setTableImages();
 
     Gtk::Button button_;
     Gtk::VBox mainBox_;
     Gtk::HBox handBox_;
-    Gtk::Image *cardsInHand[RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS];
-    Gtk::Button *handButtons[RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS];
+    Gtk::Image *cardsInHand[HAND_SIZE];
+    Gtk::Button *handButtons[HAND_SIZE];
     Gtk::Frame frame_;
     Gtk::Table table_;
-    Gtk::Image *cardsOnTable[RANK_COUNT * SUIT_COUNT];
+    Gtk::Image *cardsOnTable[TABLE_SIZE];
     ImageFactory images_;
 
 };
