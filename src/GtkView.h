@@ -36,12 +36,12 @@ public:
 protected:
     Game* game_;
     GameState gameState_;
-    virtual void onButtonClicked();
+    void onCardClicked(Card);
 
     Gtk::Button button_;
     Gtk::HBox handBox_;
+    Gtk::Image *cardsInHand[RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS];
     Gtk::Frame frame_;
-    Gtk::Image *cards_[SUIT_COUNT * RANK_COUNT + 1];
     ImageFactory images_;
 
 };

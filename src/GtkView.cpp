@@ -21,27 +21,28 @@ GtkView::GtkView(Game* game): game_(game), handBox_(true, 10){
     add(frame_);
 //
     frame_.add(handBox_);
-    for (int i = 0; i < SUIT_COUNT * RANK_COUNT + 1; i++) {
-        cards_[i] = new Gtk::Image(images_.getCardImage(i));
-    }
 
 
-    for (Card card : gameState_.hand) {
-        handBox_.add(*cards_[card.getSuit() * RANK_COUNT + card.getRank()]);
+    for (int card = 0; card < gameState_.hand.size(); card++) {
+        cardsInHand[card] = new Gtk::Image(images_.getCardImage(gameState_.hand[card]));
+        Gtk::Button *button = new Gtk::Button();
+        button->signal_clicked().connect(
+                sigc::bind(sigc::mem_fun(*this, &GtkView::onCardClicked), gameState_.hand[card])
+        );
+        button->add(*cardsInHand[card]);
+        handBox_.add(*button);
     }
 
     show_all();
 }
 
-GtkView::~GtkView() {
-    for (int i = 0; i < 4; i++) {
-        delete cards_[i];
-    }
+void GtkView::onCardClicked(Card c) {
+    std::cout << "Card clicked: " << c << std::endl;
 }
 
-void GtkView::onButtonClicked() {
-  std::cout << "Button Clicked" << std::endl;
-};
+GtkView::~GtkView() {
+}
+
 
 void GtkView::update() {
     std::string currentPlayer = game_->getCurrentPlayer()->getName();
