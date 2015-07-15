@@ -2,6 +2,8 @@
 CMakeLists.txt
 .idea/
 Straights
+straights
+*.swp
 
 # Compiled Object files
 *.slo

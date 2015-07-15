@@ -55,6 +55,24 @@ const std::vector<Player>* Game::getPlayers() const {
     return &players_;
 };
 
+void Game::endGame() {
+    // going to likely need work
+    running_ = false;
+    notify();
+}
+
+void Game::startGame(int seed) {
+    // going to likely need work
+    seed_ = seed;
+    running_ = true;
+    notify();
+    nextRound();
+}
+
+bool Game::isStarted() const {
+    return running_;
+}
+
 void Game::play(Card card) {
     hands_[currentPlayer_].removeCard(card);
     table_.playCard(card);

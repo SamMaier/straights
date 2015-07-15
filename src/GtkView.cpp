@@ -18,9 +18,7 @@ const Gdk::Color RED = getColor(196, 43, 26);
 const Gdk::Color LIGHT_RED = getColor(255, 0, 0);
 const Gdk::Color YELLOW = getColor(242, 213, 46);
 const Gdk::Color LIGHT_YELLOW = getColor(231, 240, 72);
-
-
-GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT){
+GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), table_(SUIT_COUNT, RANK_COUNT) {
 
     game->subscribe(this);
     queryModel();
@@ -32,6 +30,15 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     frame_.set_label("Your Hand");
     frame_.set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
     frame_.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+
+    mainBox_.pack_start(headerBox_, Gtk::PACK_SHRINK);
+    // add initial value of 0 seedTextEntry_();
+    newGameButton_.signal_clicked().connect(
+            sigc::mem_fun(*this, &GtkView::onNewGameClicked));
+    endGameButton_.signal_clicked().connect(
+            sigc::mem_fun(*this, &GtkView::onEndGameClicked));
+    headerBox_.add(newGameButton_); headerBox_.add(seedTextEntry_); headerBox_.add(endGameButton_);
+
 
     table_.set_row_spacings(10);
     mainBox_.pack_start(table_, Gtk::PACK_SHRINK);
@@ -53,6 +60,17 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
 
     show_all();
 
+}
+
+void GtkView::onNewGameClicked() {
+    std::cout << "New game hit." << std::endl;
+    int seed = atoi(seedTextEntry_.get_text().c_str());
+    controller_->startGame(seed);
+}
+
+void GtkView::onEndGameClicked() {
+    std::cout << "End game hit." << std::endl;
+    controller_->endGame();
 }
 
 void GtkView::onCardClicked(Card c) {

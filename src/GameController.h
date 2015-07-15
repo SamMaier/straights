@@ -15,7 +15,9 @@ public:
     void play(Card card);
     void discard(Card card);
     void disablePlayer();
-    void exit();
+    void exit(); //might not ever need
+    void endGame();
+    void startGame(int seed);
     static const int NUM_PLAYERS = 4;
     static const int MAX_SCORE = 80;
 private:
