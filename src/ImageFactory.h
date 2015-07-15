@@ -8,6 +8,9 @@
 #include<gdkmm/pixbuf.h>
 #include "Card.h"
 
+
+#define NIL_CARD 52
+
 class ImageFactory {
 public:
     ImageFactory();

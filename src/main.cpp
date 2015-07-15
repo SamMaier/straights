@@ -27,9 +27,6 @@ void printState(Game* game) {
 
 int main( int argc, char *argv[] ) {
 
-
-//    Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file("res/0_0.png");
-
     int seed = 0;
     if ( argc > 1 ) {
         seed = atoi(argv[1]);

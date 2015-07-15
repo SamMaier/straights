@@ -40,12 +40,18 @@ protected:
     GameState gameState_;
     void onCardClicked(Card);
     void queryModel();
-    void setHandImages();
+    void clearHandButtons();
+    void setHandButtons();
+    void setTableImages();
 
     Gtk::Button button_;
+    Gtk::VBox mainBox_;
     Gtk::HBox handBox_;
     Gtk::Image *cardsInHand[RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS];
+    Gtk::Button *handButtons[RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS];
     Gtk::Frame frame_;
+    Gtk::Table table_;
+    Gtk::Image *cardsOnTable[RANK_COUNT * SUIT_COUNT];
     ImageFactory images_;
 
 };
