@@ -31,7 +31,7 @@ struct GameState {
 class GtkView : public Gtk::Window, public Observer {
 public:
     GtkView(Game*);
-    virtual ~GtkView() {};
+    virtual ~GtkView();
     void update();
 protected:
     Game* game_;
@@ -41,6 +41,7 @@ protected:
     Gtk::Button button_;
     Gtk::HBox handBox_;
     Gtk::Frame frame_;
+    Gtk::Image *cards_[SUIT_COUNT * RANK_COUNT + 1];
     ImageFactory images_;
 
 };

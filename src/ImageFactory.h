@@ -13,6 +13,7 @@ public:
     ImageFactory();
     virtual ~ImageFactory();
     Glib::RefPtr<Gdk::Pixbuf> getCardImage(Card);
+    Glib::RefPtr<Gdk::Pixbuf> getCardImage(int index);
 private:
     std::vector< Glib::RefPtr< Gdk::Pixbuf > > cards_;
 
