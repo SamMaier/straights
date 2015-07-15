@@ -71,23 +71,40 @@ GtkView::~GtkView() {
 }
 
 
-
-void GtkView::clearHandButtons() {
-    for (int card = 0; card < gameState_.hand.size(); card++) {
-        handBox_.remove(*handButtons[card]);
+void GtkView::clearTableImages() {
+    const Glib::RefPtr<Gdk::Pixbuf> nilCard = images_.getCardImage(NIL_CARD);
+    for (int card = 0; card < TABLE_SIZE; card++) {
+        cardsOnTable[card]->set(nilCard);
     }
 }
 
+
+void GtkView::clearHandButtons() {
+    for (int card = 0; card < HAND_SIZE; card++) {
+        if (handButtons[card] != NULL)
+            delete handButtons[card];
+        handButtons[card] = new Gtk::Button();
+    }
+}
+
+
+
 void GtkView::setHandButtons() {
+    clearHandButtons();
     for (int card = 0; card < gameState_.hand.size(); card++) {
         cardsInHand[card] = new Gtk::Image(images_.getCardImage(gameState_.hand[card]));
-        handButtons[card]= new Gtk::Button();
+            handButtons[card] = new Gtk::Button();
         handButtons[card]->signal_clicked().connect(
                 sigc::bind(sigc::mem_fun(*this, &GtkView::onCardClicked), gameState_.hand[card])
         );
         handButtons[card]->add(*cardsInHand[card]);
         handBox_.add(*handButtons[card]);
     }
+
+    for (int card = gameState_.hand.size(); card < HAND_SIZE; card++) {
+        handBox_.add(*handButtons[card]);
+    }
+    show_all();
 }
 
 void GtkView::setTableImages() {
@@ -128,8 +145,8 @@ void GtkView::queryModel() {
 void GtkView::update() {
     std::cout << "Update!" << std::endl;
     queryModel();
-    clearHandButtons();
     setHandButtons();
+    clearTableImages();
     setTableImages();
 }
 
