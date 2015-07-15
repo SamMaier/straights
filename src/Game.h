@@ -25,6 +25,9 @@ public:
     const Deck* getDeck() const;
     const Table* getTable() const;
     const std::vector<Player>* getPlayers() const;
+    void endGame();
+    void startGame(int seed);
+    bool isStarted() const;
     static const int NUM_PLAYERS = 4;
     static const int MAX_SCORE = 80;
     static bool isValidPlay(const Card& card, const Hand& hand, const Table& table);

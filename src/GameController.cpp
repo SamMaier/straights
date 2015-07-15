@@ -24,3 +24,11 @@ void GameController::disablePlayer() {
 void GameController::exit() {
     game_->running_ = false;
 }
+
+void GameController::endGame() {
+    game_->endGame();
+}
+
+void GameController::startGame(int seed) {
+    game_->startGame(seed);
+}

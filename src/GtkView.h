@@ -5,6 +5,7 @@
 #ifndef STRAIGHTS_GTKVIEW_H
 #define STRAIGHTS_GTKVIEW_H
 
+#include <stdlib.h>
 #include "Observer.h"
 #include "gtkmm.h"
 #include <iostream>
@@ -39,6 +40,8 @@ protected:
     GameController* controller_;
     GameState gameState_;
     void onCardClicked(Card);
+    void onNewGameClicked();
+    void onEndGameClicked();
     void queryModel();
     void clearHandButtons();
     void setHandButtons();
@@ -47,6 +50,10 @@ protected:
     Gtk::Button button_;
     Gtk::VBox mainBox_;
     Gtk::HBox handBox_;
+    Gtk::HBox headerBox_;
+    Gtk::Button newGameButton_;
+    Gtk::Entry seedTextEntry_;
+    Gtk::Button endGameButton_;
     Gtk::Image *cardsInHand[RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS];
     Gtk::Button *handButtons[RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS];
     Gtk::Frame frame_;
