@@ -14,10 +14,16 @@ Gdk::Color getColor(int r = 0, int g = 0, int b = 0) {
 
 const Gdk::Color GREEN = getColor(31, 209, 55);
 const Gdk::Color LIGHT_GREEN = getColor(46, 242,72);
-const Gdk::Color RED = getColor(196, 43, 26);
-const Gdk::Color LIGHT_RED = getColor(255, 0, 0);
+const Gdk::Color RED = getColor(252, 137, 124);
+const Gdk::Color LIGHT_RED = getColor(255, 186, 179);
 const Gdk::Color YELLOW = getColor(242, 213, 46);
 const Gdk::Color LIGHT_YELLOW = getColor(231, 240, 72);
+
+bool isCardPlayable(GameState state, Card card) {
+    return std::find(state.validMoves.begin(), state.validMoves.end(), card) != state.validMoves.end();
+}
+
+
 GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), table_(SUIT_COUNT, RANK_COUNT) {
 
     game->subscribe(this);
@@ -75,7 +81,11 @@ void GtkView::onEndGameClicked() {
 
 void GtkView::onCardClicked(Card c) {
     std::cout << "Card clicked: " << c << std::endl;
-    controller_->play(c);
+
+    if (gameState_.validMoves.size() == 0)
+        controller_->discard(c);
+    else if (isCardPlayable(gameState_, c))
+        controller_->play(c);
 }
 
 GtkView::~GtkView() {
@@ -103,19 +113,22 @@ void GtkView::clearHandButtons() {
 void GtkView::setHandButtons() {
     clearHandButtons();
     for (int card = 0; card < gameState_.hand.size(); card++) {
+        Card cardInHand = gameState_.hand[card];
 
 
-        cardsInHand[card] = new Gtk::Image(images_.getCardImage(gameState_.hand[card]));
+        bool discardable = gameState_.validMoves.size() == 0;
+        bool playable = isCardPlayable(gameState_, cardInHand);
+        cardsInHand[card] = new Gtk::Image(images_.getCardImage(cardInHand));
         Gtk::Button* button = new Gtk::Button();
         Glib::RefPtr<Gtk::Style> style = button->get_style()->copy();
-        style->set_bg(Gtk::STATE_NORMAL, YELLOW);
-        style->set_bg(Gtk::STATE_PRELIGHT, LIGHT_YELLOW);
+        style->set_bg(Gtk::STATE_NORMAL, discardable ? YELLOW : (playable ? GREEN : RED));
+        style->set_bg(Gtk::STATE_PRELIGHT, discardable ? LIGHT_YELLOW : (playable ? LIGHT_GREEN : LIGHT_RED));
         button->set_style(style);
         handButtons[card] = button;
 
         
         handButtons[card]->signal_clicked().connect(
-                sigc::bind(sigc::mem_fun(*this, &GtkView::onCardClicked), gameState_.hand[card])
+                sigc::bind(sigc::mem_fun(*this, &GtkView::onCardClicked), cardInHand)
         );
         handButtons[card]->add(*cardsInHand[card]);
         handBox_.add(*handButtons[card]);
