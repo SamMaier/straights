@@ -10,6 +10,7 @@
 #include <iostream>
 #include "Game.h"
 #include "ImageFactory.h"
+#include "GameController.h"
 
 
 struct GameState {
@@ -30,13 +31,16 @@ struct GameState {
 
 class GtkView : public Gtk::Window, public Observer {
 public:
-    GtkView(Game*);
+    GtkView(Game*, GameController*);
     virtual ~GtkView();
     void update();
 protected:
     Game* game_;
+    GameController* controller_;
     GameState gameState_;
     void onCardClicked(Card);
+    void queryModel();
+    void setHandImages();
 
     Gtk::Button button_;
     Gtk::HBox handBox_;
