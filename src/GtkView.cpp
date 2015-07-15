@@ -6,9 +6,21 @@
 
 GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_): name(name_), score(score_), discards(discards_) {}
 
+Gdk::Color getColor(int r = 0, int g = 0, int b = 0) {
+    Gdk::Color color;
+    color.set_rgb(r << 8,g << 8,b << 8);
+    return color;
+}
+
+const Gdk::Color GREEN = getColor(31, 209, 55);
+const Gdk::Color LIGHT_GREEN = getColor(46, 242,72);
+const Gdk::Color RED = getColor(196, 43, 26);
+const Gdk::Color LIGHT_RED = getColor(255, 0, 0);
+const Gdk::Color YELLOW = getColor(242, 213, 46);
+const Gdk::Color LIGHT_YELLOW = getColor(231, 240, 72);
+
 
 GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT){
-
 
     game->subscribe(this);
     queryModel();
@@ -16,7 +28,6 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     set_border_width(10);
 
     add(mainBox_);
-
 
     frame_.set_label("Your Hand");
     frame_.set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
@@ -37,9 +48,11 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     mainBox_.pack_start(frame_, Gtk::PACK_SHRINK);
     frame_.add(handBox_);
 
+    clearHandButtons();
     setHandButtons();
 
     show_all();
+
 }
 
 void GtkView::onCardClicked(Card c) {
@@ -72,8 +85,17 @@ void GtkView::clearHandButtons() {
 void GtkView::setHandButtons() {
     clearHandButtons();
     for (int card = 0; card < gameState_.hand.size(); card++) {
+
+
         cardsInHand[card] = new Gtk::Image(images_.getCardImage(gameState_.hand[card]));
-            handButtons[card] = new Gtk::Button();
+        Gtk::Button* button = new Gtk::Button();
+        Glib::RefPtr<Gtk::Style> style = button->get_style()->copy();
+        style->set_bg(Gtk::STATE_NORMAL, YELLOW);
+        style->set_bg(Gtk::STATE_PRELIGHT, LIGHT_YELLOW);
+        button->set_style(style);
+        handButtons[card] = button;
+
+        
         handButtons[card]->signal_clicked().connect(
                 sigc::bind(sigc::mem_fun(*this, &GtkView::onCardClicked), gameState_.hand[card])
         );
@@ -129,4 +151,3 @@ void GtkView::update() {
     clearTableImages();
     setTableImages();
 }
-
