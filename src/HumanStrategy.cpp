@@ -12,6 +12,4 @@ void HumanStrategy::alertPlay(const Hand& hand, const Table& table) const {
 }
 
 Command HumanStrategy::getPlay(const Hand& hand, const Table& table) const{
-
-
 }

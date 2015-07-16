@@ -16,6 +16,10 @@ std::string Player::getName() const {
     return std::to_string(playerNumber_);
 }
 
+int Player::getNumber() const {
+    return playerNumber_;
+}
+
 Command Player::getPlay(const Table& table) const {
     return strategy_->getPlay(*hand_, table);
 }
@@ -36,12 +40,28 @@ void Player::addScore(int score) {
     score_ += score;
 }
 
+void Player::toggleHuman() {
+    if (isHuman_) {
+        delete strategy_;
+        strategy_ = new ComputerStrategy();
+        isHuman_ = false;
+    } else {
+        delete strategy_;
+        strategy_ = new HumanStrategy();
+        isHuman_ = true;
+    }
+}
+
 void Player::ragequit() {
     if (isHuman_) {
         delete strategy_;
         strategy_ = new ComputerStrategy();
         isHuman_ = false;
     }
+}
+
+void Player::resetPlayer() {
+    score_ = 0;
 }
 
 void Player::setDiscards(const std::vector<Card>* discards) {

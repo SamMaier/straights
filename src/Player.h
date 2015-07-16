@@ -18,8 +18,11 @@ public:
     Command getPlay(const Table&) const;
     void alertPlay(const Table&) const;
     std::string getName() const;
+    int getNumber() const;
     void ragequit(); // Disable a human player and set it to a computer
+    void toggleHuman(); // Toggles between human player to computer player
     void addScore(int score);
+    void resetPlayer();
     int getScore() const;
     void setHand(const Hand* hand);
     void setDiscards(const std::vector<Card>* discards);

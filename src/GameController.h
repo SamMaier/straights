@@ -14,7 +14,7 @@ public:
     GameController(Game*);
     void play(Card card);
     void discard(Card card);
-    void disablePlayer();
+    void toggleHuman(int playerNumber);
     void exit(); //might not ever need
     void endGame();
     void startGame(int seed);

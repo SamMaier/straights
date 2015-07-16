@@ -35,16 +35,11 @@ int main( int argc, char *argv[] ) {
     Game* game = new Game(seed);
     GameController* controller = new GameController(game);
 
-    controller->disablePlayer();
-    controller->disablePlayer();
-    controller->disablePlayer();
-    printState(game);
 
-   Gtk::Main kit(&argc,&argv);
-   GtkView window(game, controller);
+    Gtk::Main kit(&argc,&argv);
+    GtkView window(game, controller);
 
-   Gtk::Main::run( window);
-    printState(game);
+    Gtk::Main::run( window);
 
     return 0;
 

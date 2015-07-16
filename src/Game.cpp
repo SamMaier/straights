@@ -38,9 +38,8 @@ Game::Game(int seed) {
     for (int player = 0; player < NUM_PLAYERS; player++) {
         players_.push_back(Player(player + 1, true));
     }
-    running_ = true;
+    running_ = false;
     seed_ = seed;
-    nextRound();
 }
 
 const Deck* Game::getDeck() const{
@@ -49,6 +48,18 @@ const Deck* Game::getDeck() const{
 
 const Table *Game::getTable() const{
     return &table_;
+}
+
+void Game::toggleHuman(int playerNumber) {
+    if (running_) {
+        players_[currentPlayer_].ragequit();
+        playComputerTurn();
+        nextTurn();
+        notify();
+    } else {
+        players_[playerNumber].toggleHuman();
+        notify();
+    }
 }
 
 const std::vector<Player>* Game::getPlayers() const {
@@ -63,10 +74,13 @@ void Game::endGame() {
 
 void Game::startGame(int seed) {
     // going to likely need work
+    for (int player = 0; player < NUM_PLAYERS; player++) {
+        players_[player].resetPlayer();;
+    }
     seed_ = seed;
     running_ = true;
-    notify();
     nextRound();
+    notify();
 }
 
 bool Game::isStarted() const {
@@ -102,6 +116,7 @@ void Game::playComputerTurn() {
     switch (cmd.type) {
         case PLAY: play(cmd.card); break;
         case DISCARD: discard(cmd.card); break;
+        default: break;
     }
 }
 
@@ -114,7 +129,6 @@ void Game::nextTurn() {
     if (hands_[currentPlayer_].isEmpty()) {
 
         for (Player& player : players_) {
-            int oldScore = player.getScore();
             int discardScore = 0;
             for (Card discardedCard : *(player.getDiscards()))
                 discardScore += discardedCard.getRank() + 1;
@@ -124,10 +138,13 @@ void Game::nextTurn() {
 
         Player* maxScorePlayer = getMaxScorePlayer(&players_);
         if (maxScorePlayer->getScore() >= MAX_SCORE) {
-            exit();
+            endGame();
+            //just aguess
+            notify();
             return;
+        } else {
+            nextRound();
         }
-        nextRound();
     }
 
 

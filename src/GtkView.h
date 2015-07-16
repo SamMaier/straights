@@ -20,15 +20,16 @@ const int HAND_SIZE = RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS;
 const int TABLE_SIZE = RANK_COUNT * SUIT_COUNT;
 
 struct GameState {
-    std::string currentPlayer;
+    int currentPlayer;
     std::vector<Card> hand;
     std::set<Card> cardsOnTable;
     std::vector<Card> validMoves;
     struct PlayerInfo {
-        PlayerInfo(std::string name, int score, int discards);
+        PlayerInfo(std::string name, int score, int discards, bool isHuman);
         std::string name;
         int score;
         int discards;
+        bool isHuman;
     };
     std::vector<PlayerInfo> playerInfo;
     bool isPlaying;
@@ -52,6 +53,8 @@ protected:
     void clearTableImages();
     void setTableImages();
     void setScores();
+    void setRageButtons();
+    void toggleHumanClicked(int playerNumber);
 
     Gtk::Button button_;
     Gtk::VBox mainBox_;

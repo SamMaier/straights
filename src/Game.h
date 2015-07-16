@@ -37,6 +37,7 @@ private:
     void play(Card card);
     void discard(Card card);
     void disablePlayer();
+    void toggleHuman(int playerNumber);
     void exit();
     void nextTurn();
     void nextRound();

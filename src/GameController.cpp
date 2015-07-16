@@ -17,8 +17,8 @@ void GameController::discard(Card card) {
     game_->nextTurn();
 }
 
-void GameController::disablePlayer() {
-    game_->disablePlayer();
+void GameController::toggleHuman(int playerNumber) {
+    game_->toggleHuman(playerNumber);
 }
 
 void GameController::exit() {

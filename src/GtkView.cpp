@@ -4,7 +4,7 @@
 
 #include "GtkView.h"
 
-GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_): name(name_), score(score_), discards(discards_) {}
+GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_, bool isHuman_): name(name_), score(score_), discards(discards_), isHuman(isHuman_) {}
 
 Gdk::Color getColor(int r = 0, int g = 0, int b = 0) {
     Gdk::Color color;
@@ -23,7 +23,7 @@ bool isCardPlayable(GameState state, Card card) {
     return std::find(state.validMoves.begin(), state.validMoves.end(), card) != state.validMoves.end();
 }
 
-GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), playerInfosBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), table_(SUIT_COUNT, RANK_COUNT){
+GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT){
 
     game->subscribe(this);
     queryModel();
@@ -67,8 +67,9 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
         playerFrames[playerNumber]->set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
         playerFrames[playerNumber]->set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
-        quitButtons[playerNumber] = Gtk::manage(new Gtk::Button("Human"));
-        //tie this to a function
+        quitButtons[playerNumber] = Gtk::manage(new Gtk::Button("Make computer"));
+        quitButtons[playerNumber]->signal_clicked().connect(
+                sigc::bind(sigc::mem_fun(*this, &GtkView::toggleHumanClicked), playerNumber));
 
         scoreTexts[playerNumber] = Gtk::manage(new Gtk::Label("Score: 0"));
 
@@ -149,10 +150,9 @@ void GtkView::clearHandButtons() {
 }
 
 
-
 void GtkView::setHandButtons() {
 
-    for (int card = 0; card < gameState_.hand.size(); card++) {
+    for (unsigned int card = 0; card < gameState_.hand.size(); card++) {
         Card cardInHand = gameState_.hand[card];
 
 
@@ -195,23 +195,60 @@ void GtkView::setScores() {
     }
 }
 
+void GtkView::setRageButtons() {
+    if (gameState_.isPlaying) {
+        //Only is hit when its a human's turn, thus don't need to bother with computer logic
+        for (int i = 0; i < Game::NUM_PLAYERS; i++) {
+            quitButtons[i]->set_label("Ragequit");
+            if (i+1 != gameState_.currentPlayer)
+                quitButtons[i]->set_sensitive(false);
+            else {
+                quitButtons[i]->set_sensitive(true);
+            }
+        }        
+    } else {
+        for (int i = 0; i < Game::NUM_PLAYERS; i++) {
+            quitButtons[i]->set_sensitive(true);
+                //set callback
+            if (gameState_.playerInfo[i].isHuman) {
+                quitButtons[i]->set_label("Make computer");
+            } else {
+                quitButtons[i]->set_label("Make human");
+            }
+        }
+    }
+}
+
+void GtkView::toggleHumanClicked(int playerNumber) {
+    controller_->toggleHuman(playerNumber); 
+}
+
+
 void GtkView::queryModel() {
-    std::string currentPlayer = game_->getCurrentPlayer()->getName();
-    std::vector<Card> hand = game_->getCurrentPlayer()->getHand()->getCards();
-    std::set<Card> cardsOnTable = game_->getTable()->getCards();
-    std::vector<Card> validMoves = game_->getCurrentPlayer()->getHand()->getValidMoves(cardsOnTable);
+    bool isPlaying = game_->isStarted();
+    int currentPlayer;
+    std::vector<Card> hand;
+    std::set<Card> cardsOnTable;
+    std::vector<Card> validMoves;
     std::vector<GameState::PlayerInfo> playerInfo;
+
+    if (isPlaying) {
+        currentPlayer = game_->getCurrentPlayer()->getNumber();
+        hand = game_->getCurrentPlayer()->getHand()->getCards();
+        cardsOnTable = game_->getTable()->getCards();
+        validMoves = game_->getCurrentPlayer()->getHand()->getValidMoves(cardsOnTable);
+    }
 
     const std::vector<Player>* players = game_->getPlayers();
     for (const Player & player : *players) {
         GameState::PlayerInfo info = {
                 player.getName(),
                 player.getScore(),
-                (int) player.getDiscards()->size()
+                isPlaying ? (int) player.getDiscards()->size() : 0,
+                player.isHuman()
         };
         playerInfo.push_back(info);
     }
-    bool isPlaying = game_->isStarted();
 
     gameState_ = {
             currentPlayer,
@@ -232,4 +269,5 @@ void GtkView::update() {
     clearTableImages();
     setTableImages();
     setScores();
+    setRageButtons();
 }
