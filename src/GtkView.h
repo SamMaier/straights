@@ -31,8 +31,7 @@ struct GameState {
         int discards;
     };
     std::vector<PlayerInfo> playerInfo;
-
-
+    bool isPlaying;
 };
 
 class GtkView : public Gtk::Window, public Observer {
@@ -52,6 +51,7 @@ protected:
     void setHandButtons();
     void clearTableImages();
     void setTableImages();
+    void setScores();
 
     Gtk::Button button_;
     Gtk::VBox mainBox_;

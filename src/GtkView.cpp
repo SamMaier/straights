@@ -59,11 +59,11 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     }
     setTableImages();
 
-    for (int playerNumber = 1; playerNumber <= Game::NUM_PLAYERS; playerNumber++) {
+    for (int playerNumber = 0; playerNumber < Game::NUM_PLAYERS; playerNumber++) {
         playerHolders[playerNumber] = Gtk::manage(new Gtk::VBox(true, 10));
 
         playerFrames[playerNumber] = Gtk::manage(new Gtk::Frame());
-        playerFrames[playerNumber]->set_label("Player " + std::to_string(playerNumber));
+        playerFrames[playerNumber]->set_label("Player " + std::to_string(playerNumber + 1));
         playerFrames[playerNumber]->set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
         playerFrames[playerNumber]->set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
@@ -188,6 +188,12 @@ void GtkView::setTableImages() {
     }
 }
 
+void GtkView::setScores() {
+    for (int i = 0; i < Game::NUM_PLAYERS; i++) {
+        scoreTexts[i]->set_text("Score: " + std::to_string(gameState_.playerInfo[i].score));
+        discardTexts[i]->set_text("Discards: " + std::to_string(gameState_.playerInfo[i].discards));
+    }
+}
 
 void GtkView::queryModel() {
     std::string currentPlayer = game_->getCurrentPlayer()->getName();
@@ -205,13 +211,15 @@ void GtkView::queryModel() {
         };
         playerInfo.push_back(info);
     }
+    bool isPlaying = game_->isStarted();
 
     gameState_ = {
             currentPlayer,
             hand,
             cardsOnTable,
             validMoves,
-            playerInfo
+            playerInfo,
+            isPlaying
     };
 }
 
@@ -223,4 +231,5 @@ void GtkView::update() {
     setHandButtons();
     clearTableImages();
     setTableImages();
+    setScores();
 }
