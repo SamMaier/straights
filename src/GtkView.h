@@ -63,6 +63,12 @@ protected:
     Gtk::Image *cardsInHand[HAND_SIZE];
     Gtk::Button *handButtons[HAND_SIZE];
     Gtk::Frame frame_;
+    Gtk::HBox playerInfosBox_;
+    Gtk::Frame *playerFrames[Game::NUM_PLAYERS];
+    Gtk::VBox *playerHolders[Game::NUM_PLAYERS];
+    Gtk::Button *quitButtons[Game::NUM_PLAYERS];
+    Gtk::Label *scoreTexts[Game::NUM_PLAYERS];
+    Gtk::Label *discardTexts[Game::NUM_PLAYERS];
     Gtk::Table table_;
     Gtk::Image *cardsOnTable[TABLE_SIZE];
     ImageFactory images_;

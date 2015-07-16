@@ -7,7 +7,7 @@
 GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_): name(name_), score(score_), discards(discards_) {}
 
 
-GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), table_(SUIT_COUNT, RANK_COUNT){
+GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), playerInfosBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), table_(SUIT_COUNT, RANK_COUNT){
 
 
     game->subscribe(this);
@@ -23,25 +23,52 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     frame_.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
     mainBox_.pack_start(headerBox_, Gtk::PACK_SHRINK);
-    // add initial value of 0 seedTextEntry_();
+    seedTextEntry_.set_text("0");
     newGameButton_.signal_clicked().connect(
             sigc::mem_fun(*this, &GtkView::onNewGameClicked));
     endGameButton_.signal_clicked().connect(
             sigc::mem_fun(*this, &GtkView::onEndGameClicked));
-    headerBox_.add(newGameButton_); headerBox_.add(seedTextEntry_); headerBox_.add(endGameButton_);
+    headerBox_.add(newGameButton_);
+    headerBox_.add(seedTextEntry_);
+    headerBox_.add(endGameButton_);
 
 
     table_.set_row_spacings(10);
     mainBox_.pack_start(table_, Gtk::PACK_SHRINK);
     const Glib::RefPtr<Gdk::Pixbuf> nilCard = images_.getCardImage(NIL_CARD);
     for (int card = 0; card < SUIT_COUNT * RANK_COUNT; card++) {
-        cardsOnTable[card] = new Gtk::Image(nilCard);
+        cardsOnTable[card] = Gtk::manage(new Gtk::Image(nilCard));
 
         int row = card / RANK_COUNT;
         int column = card % RANK_COUNT;
         table_.attach(*cardsOnTable[card], column, column + 1, row, row + 1);
     }
     setTableImages();
+
+    for (int playerNumber = 1; playerNumber <= Game::NUM_PLAYERS; playerNumber++) {
+        playerHolders[playerNumber] = Gtk::manage(new Gtk::VBox(true, 10));
+
+        playerFrames[playerNumber] = Gtk::manage(new Gtk::Frame());
+        playerFrames[playerNumber]->set_label("Player " + std::to_string(playerNumber));
+        playerFrames[playerNumber]->set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
+        playerFrames[playerNumber]->set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
+
+        quitButtons[playerNumber] = Gtk::manage(new Gtk::Button("Human"));
+        //tie this to a function
+
+        scoreTexts[playerNumber] = Gtk::manage(new Gtk::Label("Score: 0"));
+
+        discardTexts[playerNumber] = Gtk::manage(new Gtk::Label("Discards: 0"));
+        
+        playerHolders[playerNumber]->pack_start(*quitButtons[playerNumber], Gtk::PACK_SHRINK);
+        playerHolders[playerNumber]->pack_start(*scoreTexts[playerNumber], Gtk::PACK_SHRINK);
+        playerHolders[playerNumber]->pack_start(*discardTexts[playerNumber], Gtk::PACK_SHRINK);
+
+        playerFrames[playerNumber]->add(*playerHolders[playerNumber]);
+
+        playerInfosBox_.add(*playerFrames[playerNumber]);
+    }
+    mainBox_.pack_start(playerInfosBox_, Gtk::PACK_SHRINK);
 
     mainBox_.pack_start(frame_, Gtk::PACK_SHRINK);
     frame_.add(handBox_);
@@ -68,6 +95,22 @@ void GtkView::onCardClicked(Card c) {
 }
 
 GtkView::~GtkView() {
+/*
+    for (int i = 0; i < HAND_SIZE; i ++ ){
+        delete cardsInHand[i];     
+        delete handButtons[i];     
+    }
+    for (int i = 0; i < Game::NUM_PLAYERS; i ++ ){
+        delete quitButtons[i];     
+        delete scoreTexts[i];     
+        delete discardTexts[i];     
+        delete playerHolders[i];     
+        delete playerFrames[i];     
+    }
+    for (int i = 0; i < TABLE_SIZE; i ++ ){
+        delete cardsOnTable[i];
+    }
+*/
 }
 
 
@@ -83,18 +126,17 @@ void GtkView::clearHandButtons() {
     for (int card = 0; card < HAND_SIZE; card++) {
         if (handButtons[card] != NULL)
             delete handButtons[card];
-        handButtons[card] = new Gtk::Button();
     }
 }
 
 
 
 void GtkView::setHandButtons() {
-    clearHandButtons();
+
     for (int card = 0; card < gameState_.hand.size(); card++) {
-        cardsInHand[card] = new Gtk::Image(images_.getCardImage(gameState_.hand[card]));
-            handButtons[card] = new Gtk::Button();
-        handButtons[card]->signal_clicked().connect(
+            cardsInHand[card] = Gtk::manage(new Gtk::Image(images_.getCardImage(gameState_.hand[card])));
+            handButtons[card] = Gtk::manage(new Gtk::Button());
+            handButtons[card]->signal_clicked().connect(
                 sigc::bind(sigc::mem_fun(*this, &GtkView::onCardClicked), gameState_.hand[card])
         );
         handButtons[card]->add(*cardsInHand[card]);
@@ -102,6 +144,7 @@ void GtkView::setHandButtons() {
     }
 
     for (int card = gameState_.hand.size(); card < HAND_SIZE; card++) {
+        handButtons[card] = Gtk::manage(new Gtk::Button());
         handBox_.add(*handButtons[card]);
     }
     show_all();
@@ -145,6 +188,7 @@ void GtkView::queryModel() {
 void GtkView::update() {
     std::cout << "Update!" << std::endl;
     queryModel();
+    clearHandButtons();
     setHandButtons();
     clearTableImages();
     setTableImages();
