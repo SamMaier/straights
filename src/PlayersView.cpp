@@ -11,21 +11,22 @@ PlayersView::PlayersView(Game *game, GameController *controller): game_(game), c
     game->subscribe(this);
     queryModel();
 
-
     for (int playerNumber = 0; playerNumber < Game::NUM_PLAYERS; playerNumber++) {
         playerHolders[playerNumber] = Gtk::manage(new Gtk::VBox(true, 10));
 
+        // Style all the frames around the player box
         playerFrames[playerNumber] = Gtk::manage(new Gtk::Frame());
         playerFrames[playerNumber]->set_label("Player " + std::to_string(playerNumber + 1));
         playerFrames[playerNumber]->set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
         playerFrames[playerNumber]->set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
+
         quitButtons[playerNumber] = Gtk::manage(new Gtk::Button("Make computer"));
         quitButtons[playerNumber]->signal_clicked().connect(
                 sigc::bind(sigc::mem_fun(*this, &PlayersView::toggleHumanClicked), playerNumber));
 
+        // Initialize the text values to 0 as players start with that value
         scoreTexts[playerNumber] = Gtk::manage(new Gtk::Label("Score: 0"));
-
         discardTexts[playerNumber] = Gtk::manage(new Gtk::Label("Discards: 0"));
 
         playerHolders[playerNumber]->pack_start(*quitButtons[playerNumber], Gtk::PACK_SHRINK);
