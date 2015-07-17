@@ -4,10 +4,8 @@
 #include "Hand.h"
 #include "Table.h"
 #include "Command.h"
-#include "View.h"
 #include "Strategy.h"
 
-class View;
 
 class Player {
 public:
@@ -34,7 +32,6 @@ private:
     int score_;
     const Hand* hand_;
     const std::vector<Card>* discards_;
-    View* view_;
     bool isHuman_;
     Strategy* strategy_;
 };

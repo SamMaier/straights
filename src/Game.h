@@ -14,7 +14,6 @@
 #include "Player.h"
 #include "Subject.h"
 
-class View;
 class Player;
 
 
