@@ -15,6 +15,7 @@ public:
     void play(Card card);
     void discard(Card card);
     void toggleHuman(int playerNumber);
+    void startNextRound();
     void exit(); //might not ever need
     void endGame();
     void startGame(int seed);

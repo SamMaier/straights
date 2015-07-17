@@ -32,6 +32,7 @@ struct GameState {
         bool isHuman;
     };
     std::vector<PlayerInfo> playerInfo;
+    bool isEndOfRound;
     bool isPlaying;
 };
 
@@ -44,16 +45,19 @@ protected:
     Game* game_;
     GameController* controller_;
     GameState gameState_;
+    bool popUpShown;
     void onCardClicked(Card);
     void onNewGameClicked();
     void onEndGameClicked();
     void queryModel();
+    void endOfRoundPopups();
     void clearHandButtons();
     void setHandButtons();
     void clearTableImages();
     void setTableImages();
     void setScores();
     void setRageButtons();
+    void startNextRound();
     void toggleHumanClicked(int playerNumber);
 
     Gtk::Button button_;

@@ -28,6 +28,7 @@ public:
     void endGame();
     void startGame(int seed);
     bool isStarted() const;
+    bool isEndOfRound() const;
     static const int NUM_PLAYERS = 4;
     static const int MAX_SCORE = 80;
     static bool isValidPlay(const Card& card, const Hand& hand, const Table& table);
@@ -41,7 +42,9 @@ private:
     void exit();
     void nextTurn();
     void nextRound();
+    void startNextRound();
     int currentPlayer_;
+    bool endOfRoundState;
     Deck deck_;
     Table table_;
     std::vector<Hand> hands_;

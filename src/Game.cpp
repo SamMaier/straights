@@ -79,7 +79,7 @@ void Game::startGame(int seed) {
     }
     seed_ = seed;
     running_ = true;
-    nextRound();
+    startNextRound();
     notify();
 }
 
@@ -139,12 +139,11 @@ void Game::nextTurn() {
         Player* maxScorePlayer = getMaxScorePlayer(&players_);
         if (maxScorePlayer->getScore() >= MAX_SCORE) {
             endGame();
-            //just aguess
             notify();
-            return;
         } else {
             nextRound();
         }
+        return;
     }
 
 
@@ -156,7 +155,17 @@ void Game::nextTurn() {
     notify();
 }
 
+bool Game::isEndOfRound() const {
+    return endOfRoundState;
+}
+
 void Game::nextRound() {
+    endOfRoundState = true;
+    notify();
+}
+
+void Game::startNextRound() {
+    endOfRoundState = false;
 
     // Initialize all hands and discard piles to empty
     hands_.clear();

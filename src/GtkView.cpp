@@ -23,7 +23,7 @@ bool isCardPlayable(GameState state, Card card) {
     return std::find(state.validMoves.begin(), state.validMoves.end(), card) != state.validMoves.end();
 }
 
-GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT){
+GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), popUpShown(true), mainBox_(false, 10), handBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT){
 
     game->subscribe(this);
     queryModel();
@@ -95,6 +95,7 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
 }
 
 void GtkView::onNewGameClicked() {
+    popUpShown = false;
     std::cout << "New game hit." << std::endl;
     int seed = atoi(seedTextEntry_.get_text().c_str());
     controller_->startGame(seed);
@@ -116,21 +117,9 @@ void GtkView::onCardClicked(Card c) {
 
 GtkView::~GtkView() {
     for (int i = 0; i < HAND_SIZE; i ++ ){
-//        delete cardsInHand[i];     
-        delete handButtons[i];     
+        if (handButtons[i] != NULL)
+            delete handButtons[i];     
     }
-/*
-    for (int i = 0; i < Game::NUM_PLAYERS; i ++ ){
-        delete quitButtons[i];     
-        delete scoreTexts[i];     
-        delete discardTexts[i];     
-        delete playerHolders[i];     
-        delete playerFrames[i];     
-    }
-    for (int i = 0; i < TABLE_SIZE; i ++ ){
-        delete cardsOnTable[i];
-    }
-*/
 }
 
 
@@ -144,8 +133,10 @@ void GtkView::clearTableImages() {
 
 void GtkView::clearHandButtons() {
     for (int card = 0; card < HAND_SIZE; card++) {
-        if (handButtons[card] != NULL)
+        if (handButtons[card] != NULL) {
             delete handButtons[card];
+            handButtons[card] = NULL;
+        }
     }
 }
 
@@ -175,7 +166,7 @@ void GtkView::setHandButtons() {
     }
 
     for (int card = gameState_.hand.size(); card < HAND_SIZE; card++) {
-        handButtons[card] = Gtk::manage(new Gtk::Button());
+        handButtons[card] = new Gtk::Button();
         handBox_.add(*handButtons[card]);
     }
     show_all();
@@ -226,6 +217,7 @@ void GtkView::toggleHumanClicked(int playerNumber) {
 
 void GtkView::queryModel() {
     bool isPlaying = game_->isStarted();
+    bool isEndOfRound = game_->isEndOfRound();
     int currentPlayer;
     std::vector<Card> hand;
     std::set<Card> cardsOnTable;
@@ -256,15 +248,40 @@ void GtkView::queryModel() {
             cardsOnTable,
             validMoves,
             playerInfo,
+            isEndOfRound,
             isPlaying
     };
 }
 
+void GtkView::endOfRoundPopups() {
+    if (!popUpShown) {
+        if (!gameState_.isPlaying) {
+            std::cout << "End of Game";
+
+            Gtk::MessageDialog dialog( "End of Game", true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
+            dialog.run();
+            popUpShown = true;
+        }
+        if (gameState_.isEndOfRound) {
+            std::cout << "End of Round";
+            Gtk::MessageDialog dialog( "End of Round", true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
+            dialog.run();
+            popUpShown = true;
+            startNextRound();
+        }
+    }
+}
+
+void GtkView::startNextRound() {
+    popUpShown = false;
+    controller_->startNextRound();
+}
 
 void GtkView::update() {
     std::cout << "Update!" << std::endl;
     queryModel();
     clearHandButtons();
+    endOfRoundPopups();
     setHandButtons();
     clearTableImages();
     setTableImages();

@@ -21,6 +21,10 @@ void GameController::toggleHuman(int playerNumber) {
     game_->toggleHuman(playerNumber);
 }
 
+void GameController::startNextRound() {
+    game_->startNextRound();
+}
+
 void GameController::exit() {
     game_->running_ = false;
 }
