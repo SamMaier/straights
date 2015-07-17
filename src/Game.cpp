@@ -75,10 +75,11 @@ void Game::endGame() {
 void Game::startGame(int seed) {
     // going to likely need work
     for (int player = 0; player < NUM_PLAYERS; player++) {
-        players_[player].resetPlayer();;
+        players_[player].resetPlayer();
     }
     seed_ = seed;
     running_ = true;
+    deck_ = Deck();
     nextRound();
     notify();
 }
