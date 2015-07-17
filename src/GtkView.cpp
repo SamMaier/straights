@@ -5,10 +5,9 @@
 #include "GtkView.h"
 #include <sstream>
 
-GtkView::GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, std::vector<Card> discards_, bool isHuman_): name(name_), score(score_), discards(discards_), isHuman(isHuman_) {}
 
 
-GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), popUpShown(true), mainBox_(false, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT), handView_(game, controller){
+GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), popUpShown(true), mainBox_(false, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), table_(SUIT_COUNT, RANK_COUNT), handView_(game, controller), playersView_(game, controller){
     game->subscribe(this);
     queryModel();
 
@@ -26,7 +25,6 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     headerBox_.add(seedTextEntry_);
     headerBox_.add(endGameButton_);
 
-
     table_.set_row_spacings(10);
     mainBox_.pack_start(table_, Gtk::PACK_SHRINK);
     const Glib::RefPtr<Gdk::Pixbuf> nilCard = images_.getCardImage(NIL_CARD);
@@ -39,31 +37,7 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     }
     setTableImages();
 
-    for (int playerNumber = 0; playerNumber < Game::NUM_PLAYERS; playerNumber++) {
-        playerHolders[playerNumber] = Gtk::manage(new Gtk::VBox(true, 10));
-
-        playerFrames[playerNumber] = Gtk::manage(new Gtk::Frame());
-        playerFrames[playerNumber]->set_label("Player " + std::to_string(playerNumber + 1));
-        playerFrames[playerNumber]->set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
-        playerFrames[playerNumber]->set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
-
-        quitButtons[playerNumber] = Gtk::manage(new Gtk::Button("Make computer"));
-        quitButtons[playerNumber]->signal_clicked().connect(
-                sigc::bind(sigc::mem_fun(*this, &GtkView::toggleHumanClicked), playerNumber));
-
-        scoreTexts[playerNumber] = Gtk::manage(new Gtk::Label("Score: 0"));
-
-        discardTexts[playerNumber] = Gtk::manage(new Gtk::Label("Discards: 0"));
-        
-        playerHolders[playerNumber]->pack_start(*quitButtons[playerNumber], Gtk::PACK_SHRINK);
-        playerHolders[playerNumber]->pack_start(*scoreTexts[playerNumber], Gtk::PACK_SHRINK);
-        playerHolders[playerNumber]->pack_start(*discardTexts[playerNumber], Gtk::PACK_SHRINK);
-
-        playerFrames[playerNumber]->add(*playerHolders[playerNumber]);
-
-        playerInfosBox_.add(*playerFrames[playerNumber]);
-    }
-    mainBox_.pack_start(playerInfosBox_, Gtk::PACK_SHRINK);
+    mainBox_.pack_start(playersView_);
     mainBox_.pack_start(handView_, Gtk::PACK_SHRINK);
 
     show_all();
@@ -100,69 +74,20 @@ void GtkView::setTableImages() {
     }
 }
 
-void GtkView::setScores() {
-    for (int i = 0; i < Game::NUM_PLAYERS; i++) {
-        scoreTexts[i]->set_text("Score: " + std::to_string(gameState_.playerInfo[i].score));
-        discardTexts[i]->set_text("Discards: " + std::to_string(gameState_.playerInfo[i].discards.size()));
-    }
-}
-
-void GtkView::setRageButtons() {
-    if (gameState_.isPlaying) {
-        //Only is hit when its a human's turn, thus don't need to bother with computer logic
-        for (int i = 0; i < Game::NUM_PLAYERS; i++) {
-            quitButtons[i]->set_label("Ragequit");
-            if (i+1 != gameState_.currentPlayer)
-                quitButtons[i]->set_sensitive(false);
-            else {
-                quitButtons[i]->set_sensitive(true);
-            }
-        }        
-    } else {
-        for (int i = 0; i < Game::NUM_PLAYERS; i++) {
-            quitButtons[i]->set_sensitive(true);
-                //set callback
-            if (gameState_.playerInfo[i].isHuman) {
-                quitButtons[i]->set_label("Make computer");
-            } else {
-                quitButtons[i]->set_label("Make human");
-            }
-        }
-    }
-}
-
-void GtkView::toggleHumanClicked(int playerNumber) {
-    controller_->toggleHuman(playerNumber); 
-}
-
 
 void GtkView::queryModel() {
     bool isPlaying = game_->isStarted();
     bool isEndOfRound = game_->isEndOfRound();
-    int currentPlayer;
     std::set<Card> cardsOnTable;
-    std::vector<GameState::PlayerInfo> playerInfo;
+    const std::vector<Player>* players = game_->getPlayers();
 
     if (isPlaying) {
-        currentPlayer = game_->getCurrentPlayer()->getNumber();
         cardsOnTable = game_->getTable()->getCards();
     }
 
-    const std::vector<Player>* players = game_->getPlayers();
-    for (const Player & player : *players) {
-        GameState::PlayerInfo info = {
-                player.getName(),
-                player.getScore(),
-                isPlaying ? *(player.getDiscards()) : std::vector<Card>(),
-                player.isHuman()
-        };
-        playerInfo.push_back(info);
-    }
-
     gameState_ = {
-            currentPlayer,
             cardsOnTable,
-            playerInfo,
+            players,
             isEndOfRound,
             isPlaying
     };
@@ -174,15 +99,14 @@ void GtkView::endOfRoundPopups() {
             std::cout << std::endl << "End of Round" << std::endl;
 
             std::stringstream ss;
-            for (int i = 0; i < Game::NUM_PLAYERS; i++) {
-                GameState::PlayerInfo player = gameState_.playerInfo[i];
+            for (Player player: *(gameState_.players)) {
                 int scoreGained = 0;
-                for (Card card : player.discards) {
+                for (Card card : *(player.getDiscards())) {
                     scoreGained += card.getRank() + 1;
                 }
-                int oldScore = player.score - scoreGained;
-                ss << "Player " << player.name << "'s discards:" << Card::prettyPrint(player.discards) << std::endl;
-                ss << "Player " << player.name << "'s score: " << oldScore << " + " << scoreGained << " = " << player.score << std::endl;
+                int oldScore = player.getScore() - scoreGained;
+                ss << "Player " << player.getName() << "'s discards:" << Card::prettyPrint(*(player.getDiscards())) << std::endl;
+                ss << "Player " << player.getName() << "'s score: " << oldScore << " + " << scoreGained << " = " << player.getScore() << std::endl;
             }
             Gtk::MessageDialog dialog( ss.str(), true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
             dialog.run();
@@ -190,12 +114,25 @@ void GtkView::endOfRoundPopups() {
             //If the game hasn't ended, ok will just start the next round
             if (gameState_.isPlaying) {
                 startNextRound();
+                return;
             }
         }
         if (!gameState_.isPlaying) {
             std::cout << std::endl << "End of Game" << std::endl;
 
-            Gtk::MessageDialog dialog( "End of Game", true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
+            std::stringstream ss;
+            ss << "End of Game." << std::endl;
+            std::vector<Player*> winners = game_->getWinners();
+            if (winners.size() == 1) {
+                ss << "The winner is: Player " << winners[0]->getName() << "!";
+            } else {
+                ss << "The winners are: " << std::endl;
+                for (Player* p : winners) {
+                    ss << "Player " << p->getName() << "!" << std::endl;
+                }
+            }
+
+            Gtk::MessageDialog dialog( ss.str(), true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
             dialog.run();
             popUpShown = true;
         }
@@ -212,6 +149,4 @@ void GtkView::update() {
     endOfRoundPopups();
     clearTableImages();
     setTableImages();
-    setScores();
-    setRageButtons();
 }

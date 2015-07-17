@@ -13,6 +13,8 @@
 #include "ImageFactory.h"
 #include "GameController.h"
 #include "HandView.h"
+#include "PlayersView.h"
+#include "Player.h"
 
 
 const int TABLE_SIZE = RANK_COUNT * SUIT_COUNT;
@@ -25,16 +27,8 @@ public:
 
 protected:
     struct GameState {
-        int currentPlayer;
         std::set<Card> cardsOnTable;
-        struct PlayerInfo {
-            PlayerInfo(std::string name, int score, std::vector<Card> discards, bool isHuman);
-            std::string name;
-            int score;
-            std::vector<Card> discards;
-            bool isHuman;
-        };
-        std::vector<PlayerInfo> playerInfo;
+        const std::vector<Player>* players;
         bool isEndOfRound;
         bool isPlaying;
     };
@@ -52,24 +46,17 @@ protected:
 
     void clearTableImages();
     void setTableImages();
-    void setScores();
-    void setRageButtons();
+
     void startNextRound();
-    void toggleHumanClicked(int playerNumber);
 
     HandView handView_;
+    PlayersView playersView_;
 
     Gtk::VBox mainBox_;
     Gtk::HBox headerBox_;
     Gtk::Button newGameButton_;
     Gtk::Entry seedTextEntry_;
     Gtk::Button endGameButton_;
-    Gtk::HBox playerInfosBox_;
-    Gtk::Frame *playerFrames[Game::NUM_PLAYERS];
-    Gtk::VBox *playerHolders[Game::NUM_PLAYERS];
-    Gtk::Button *quitButtons[Game::NUM_PLAYERS];
-    Gtk::Label *scoreTexts[Game::NUM_PLAYERS];
-    Gtk::Label *discardTexts[Game::NUM_PLAYERS];
     Gtk::Table table_;
     Gtk::Image *cardsOnTable[TABLE_SIZE];
     ImageFactory images_;
