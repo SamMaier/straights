@@ -4,6 +4,9 @@
 
 #include "HandView.h"
 
+
+//Gdk colors need to be offset by 8 bits for some reason.  This enables the
+// programmer to use standard RGB values from 0-255 rather than 0x00FF-0xFFFF
 Gdk::Color getColor(int r = 0, int g = 0, int b = 0) {
     Gdk::Color color;
     color.set_rgb(r << 8,g << 8,b << 8);
@@ -26,8 +29,7 @@ HandView::HandView(Game *game, GameController *controller): game_(game), control
     game->subscribe(this);
     queryModel();
 
-
-    set_label("Your Hand");
+    set_label("Your hand");
     set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
     set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
     add(handBox_);
@@ -36,36 +38,38 @@ HandView::HandView(Game *game, GameController *controller): game_(game), control
 }
 
 void HandView::clearHandButtons() {
-    for (int card = 0; card < HAND_SIZE; card++) {
+    for (int card = 0; card < MAX_HAND_SIZE; card++) {
         if (handButtons_[card] != NULL)
             delete handButtons_[card];
     }
 }
 
 void HandView::setHandButtons() {
-    for (unsigned int card = 0; card < gameState_.hand.size(); card++) {
-        Card cardInHand = gameState_.hand[card];
+    for (unsigned int handIndex = 0; handIndex < gameState_.hand.size(); handIndex++) {
+        Card card = gameState_.hand[handIndex];
 
 
+        // Color the card buttons depending on whether they are playable, discardable, or unplayable
         bool discardable = gameState_.validMoves.size() == 0;
-        bool playable = isCardPlayable(&gameState_, cardInHand);
-        cardsInHand_[card] = Gtk::manage(new Gtk::Image(images_.getCardImage(cardInHand)));
+        bool playable = isCardPlayable(&gameState_, card);
+        cardsInHand_[handIndex] = Gtk::manage(new Gtk::Image(images_.getCardImage(card)));
         Gtk::Button* button = Gtk::manage(new Gtk::Button());
         Glib::RefPtr<Gtk::Style> style = button->get_style()->copy();
         style->set_bg(Gtk::STATE_NORMAL, discardable ? YELLOW : (playable ? GREEN : RED));
         style->set_bg(Gtk::STATE_PRELIGHT, discardable ? LIGHT_YELLOW : (playable ? LIGHT_GREEN : LIGHT_RED));
         button->set_style(style);
-        handButtons_[card] = button;
+        handButtons_[handIndex] = button;
 
 
-        handButtons_[card]->signal_clicked().connect(
-                sigc::bind(sigc::mem_fun(*this, &HandView::onCardClicked), cardInHand)
+        handButtons_[handIndex]->signal_clicked().connect(
+                sigc::bind(sigc::mem_fun(*this, &HandView::onCardClicked), card)
         );
-        handButtons_[card]->add(*cardsInHand_[card]);
-        handBox_.add(*handButtons_[card]);
+        handButtons_[handIndex]->add(*cardsInHand_[handIndex]);
+        handBox_.add(*handButtons_[handIndex]);
     }
 
-    for (int card = gameState_.hand.size(); card < HAND_SIZE; card++) {
+    // Fill in the remaining spots in the hand display with empty card buttons
+    for (int card = gameState_.hand.size(); card < MAX_HAND_SIZE; card++) {
         handButtons_[card] = Gtk::manage(new Gtk::Button());
         handButtons_[card]->add(*Gtk::manage(new Gtk::Image(images_.getCardImage(NIL_CARD))));
         handBox_.add(*handButtons_[card]);

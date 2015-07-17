@@ -14,7 +14,7 @@
 #include "GameController.h"
 #include "ImageFactory.h"
 
-const int HAND_SIZE = RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS;
+const int MAX_HAND_SIZE = RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS;
 
 
 
@@ -35,8 +35,8 @@ private:
     void onCardClicked(Card);
     void clearHandButtons();
     void setHandButtons();
-    Gtk::Image *cardsInHand_[HAND_SIZE];
-    Gtk::Button *handButtons_[HAND_SIZE];
+    Gtk::Image *cardsInHand_[MAX_HAND_SIZE];
+    Gtk::Button *handButtons_[MAX_HAND_SIZE];
     ImageFactory images_;
     GameState gameState_;
     void queryModel();

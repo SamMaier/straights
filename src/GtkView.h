@@ -29,7 +29,6 @@ protected:
     struct GameState {
         int currentPlayer;
         std::set<Card> cardsOnTable;
-        std::vector<Card> validMoves;
         struct PlayerInfo {
             PlayerInfo(std::string name, int score, int discards, bool isHuman);
             std::string name;
@@ -55,7 +54,6 @@ protected:
     void setScores();
     void setRageButtons();
     void toggleHumanClicked(int playerNumber);
-    bool isCardPlayable(GameState*, Card);
 
     HandView handView_;
 

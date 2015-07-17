@@ -6,10 +6,6 @@
 
 GtkView::GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_, bool isHuman_): name(name_), score(score_), discards(discards_), isHuman(isHuman_) {}
 
-bool GtkView::isCardPlayable(GtkView::GameState* state, Card card) {
-    return std::find(state->validMoves.begin(), state->validMoves.end(), card) != state->validMoves.end();
-}
-
 GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT), handView_(game, controller){
 
     game->subscribe(this);
@@ -143,13 +139,11 @@ void GtkView::queryModel() {
     bool isPlaying = game_->isStarted();
     int currentPlayer;
     std::set<Card> cardsOnTable;
-    std::vector<Card> validMoves;
     std::vector<GameState::PlayerInfo> playerInfo;
 
     if (isPlaying) {
         currentPlayer = game_->getCurrentPlayer()->getNumber();
         cardsOnTable = game_->getTable()->getCards();
-        validMoves = game_->getCurrentPlayer()->getHand()->getValidMoves(cardsOnTable);
     }
 
     const std::vector<Player>* players = game_->getPlayers();
@@ -166,7 +160,6 @@ void GtkView::queryModel() {
     gameState_ = {
             currentPlayer,
             cardsOnTable,
-            validMoves,
             playerInfo,
             isPlaying
     };
