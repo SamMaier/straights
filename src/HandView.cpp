@@ -39,8 +39,10 @@ HandView::HandView(Game *game, GameController *controller): game_(game), control
 
 void HandView::clearHandButtons() {
     for (int card = 0; card < MAX_HAND_SIZE; card++) {
-        if (handButtons_[card] != NULL)
+        if (handButtons_[card] != NULL) {
             delete handButtons_[card];
+            handButtons_[card] = NULL;
+        }
     }
 }
 
@@ -55,11 +57,14 @@ void HandView::setHandButtons() {
         cardsInHand_[handIndex] = Gtk::manage(new Gtk::Image(images_.getCardImage(card)));
         Gtk::Button* button = Gtk::manage(new Gtk::Button());
         Glib::RefPtr<Gtk::Style> style = button->get_style()->copy();
+
+        // Normally the user will see a YELLOW, GREEN, or RED button, but when they mouseover
+        // the buttons it will switch to the light version of the color
         style->set_bg(Gtk::STATE_NORMAL, discardable ? YELLOW : (playable ? GREEN : RED));
         style->set_bg(Gtk::STATE_PRELIGHT, discardable ? LIGHT_YELLOW : (playable ? LIGHT_GREEN : LIGHT_RED));
         button->set_style(style);
-        handButtons_[handIndex] = button;
 
+        handButtons_[handIndex] = button;
 
         handButtons_[handIndex]->signal_clicked().connect(
                 sigc::bind(sigc::mem_fun(*this, &HandView::onCardClicked), card)
@@ -70,7 +75,7 @@ void HandView::setHandButtons() {
 
     // Fill in the remaining spots in the hand display with empty card buttons
     for (int card = gameState_.hand.size(); card < MAX_HAND_SIZE; card++) {
-        handButtons_[card] = Gtk::manage(new Gtk::Button());
+        handButtons_[card] = new Gtk::Button();
         handButtons_[card]->add(*Gtk::manage(new Gtk::Image(images_.getCardImage(NIL_CARD))));
         handBox_.add(*handButtons_[card]);
     }
@@ -106,4 +111,8 @@ void HandView::update() {
     queryModel();
     clearHandButtons();
     setHandButtons();
+}
+
+HandView::~HandView() {
+    clearHandButtons();
 }

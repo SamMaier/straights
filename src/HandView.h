@@ -5,10 +5,7 @@
 #ifndef STRAIGHTS_HANDVIEW_H
 #define STRAIGHTS_HANDVIEW_H
 
-#include <gtkmm/box.h>
-#include <gtkmm/image.h>
-#include <gtkmm/button.h>
-#include <gtkmm/frame.h>
+#include <gtkmm.h>
 #include "Card.h"
 #include "Game.h"
 #include "GameController.h"
@@ -21,6 +18,7 @@ const int MAX_HAND_SIZE = RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS;
 class HandView:public Gtk::Frame, public Observer {
 public:
     HandView(Game*, GameController*);
+    ~HandView();
     void update();
 private:
 
