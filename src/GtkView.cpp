@@ -176,6 +176,7 @@ void GtkView::setHandButtons() {
 
     for (int card = gameState_.hand.size(); card < HAND_SIZE; card++) {
         handButtons[card] = Gtk::manage(new Gtk::Button());
+        handButtons[card]->add(*Gtk::manage(new Gtk::Image(images_.getCardImage(NIL_CARD))));
         handBox_.add(*handButtons[card]);
     }
     show_all();
@@ -262,7 +263,6 @@ void GtkView::queryModel() {
 
 
 void GtkView::update() {
-    std::cout << "Update!" << std::endl;
     queryModel();
     clearHandButtons();
     setHandButtons();
