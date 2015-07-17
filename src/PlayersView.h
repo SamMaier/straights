@@ -21,6 +21,16 @@ private:
     void toggleHumanClicked(int playerNumber);
 
     struct GameState {
+        int currentPlayer;
+        struct PlayerInfo {
+            PlayerInfo(std::string name, int score, int discards, bool isHuman);
+            std::string name;
+            int score;
+            int discards;
+            bool isHuman;
+        };
+        std::vector<PlayerInfo> playerInfo;
+        bool isPlaying;
     };
 
     Gtk::Frame *playerFrames[Game::NUM_PLAYERS];
