@@ -4,26 +4,13 @@
 
 #include "GtkView.h"
 
-GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_, bool isHuman_): name(name_), score(score_), discards(discards_), isHuman(isHuman_) {}
+GtkView::GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_, bool isHuman_): name(name_), score(score_), discards(discards_), isHuman(isHuman_) {}
 
-Gdk::Color getColor(int r = 0, int g = 0, int b = 0) {
-    Gdk::Color color;
-    color.set_rgb(r << 8,g << 8,b << 8);
-    return color;
+bool GtkView::isCardPlayable(GtkView::GameState* state, Card card) {
+    return std::find(state->validMoves.begin(), state->validMoves.end(), card) != state->validMoves.end();
 }
 
-const Gdk::Color GREEN = getColor(31, 209, 55);
-const Gdk::Color LIGHT_GREEN = getColor(46, 242,72);
-const Gdk::Color RED = getColor(252, 137, 124);
-const Gdk::Color LIGHT_RED = getColor(255, 186, 179);
-const Gdk::Color YELLOW = getColor(242, 213, 46);
-const Gdk::Color LIGHT_YELLOW = getColor(231, 240, 72);
-
-bool isCardPlayable(GameState state, Card card) {
-    return std::find(state.validMoves.begin(), state.validMoves.end(), card) != state.validMoves.end();
-}
-
-GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), handBox_(true, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT){
+GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), mainBox_(false, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT), handView_(game, controller){
 
     game->subscribe(this);
     queryModel();
@@ -31,10 +18,6 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
     set_border_width(10);
 
     add(mainBox_);
-
-    frame_.set_label("Your Hand");
-    frame_.set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
-    frame_.set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
     mainBox_.pack_start(headerBox_, Gtk::PACK_SHRINK);
     seedTextEntry_.set_text("0");
@@ -84,11 +67,7 @@ GtkView::GtkView(Game* game, GameController* controller): game_(game), controlle
         playerInfosBox_.add(*playerFrames[playerNumber]);
     }
     mainBox_.pack_start(playerInfosBox_, Gtk::PACK_SHRINK);
-
-    mainBox_.pack_start(frame_, Gtk::PACK_SHRINK);
-    frame_.add(handBox_);
-
-    setHandButtons();
+    mainBox_.pack_start(handView_, Gtk::PACK_SHRINK);
 
     show_all();
 
@@ -105,32 +84,7 @@ void GtkView::onEndGameClicked() {
     controller_->endGame();
 }
 
-void GtkView::onCardClicked(Card c) {
-    std::cout << "Card clicked: " << c << std::endl;
-
-    if (gameState_.validMoves.size() == 0)
-        controller_->discard(c);
-    else if (isCardPlayable(gameState_, c))
-        controller_->play(c);
-}
-
 GtkView::~GtkView() {
-    for (int i = 0; i < HAND_SIZE; i ++ ){
-//        delete cardsInHand[i];     
-        delete handButtons[i];     
-    }
-/*
-    for (int i = 0; i < Game::NUM_PLAYERS; i ++ ){
-        delete quitButtons[i];     
-        delete scoreTexts[i];     
-        delete discardTexts[i];     
-        delete playerHolders[i];     
-        delete playerFrames[i];     
-    }
-    for (int i = 0; i < TABLE_SIZE; i ++ ){
-        delete cardsOnTable[i];
-    }
-*/
 }
 
 
@@ -141,46 +95,6 @@ void GtkView::clearTableImages() {
     }
 }
 
-
-void GtkView::clearHandButtons() {
-    for (int card = 0; card < HAND_SIZE; card++) {
-        if (handButtons[card] != NULL)
-            delete handButtons[card];
-    }
-}
-
-
-void GtkView::setHandButtons() {
-
-    for (unsigned int card = 0; card < gameState_.hand.size(); card++) {
-        Card cardInHand = gameState_.hand[card];
-
-
-        bool discardable = gameState_.validMoves.size() == 0;
-        bool playable = isCardPlayable(gameState_, cardInHand);
-        cardsInHand[card] = Gtk::manage(new Gtk::Image(images_.getCardImage(cardInHand)));
-        Gtk::Button* button = new Gtk::Button();
-        Glib::RefPtr<Gtk::Style> style = button->get_style()->copy();
-        style->set_bg(Gtk::STATE_NORMAL, discardable ? YELLOW : (playable ? GREEN : RED));
-        style->set_bg(Gtk::STATE_PRELIGHT, discardable ? LIGHT_YELLOW : (playable ? LIGHT_GREEN : LIGHT_RED));
-        button->set_style(style);
-        handButtons[card] = button;
-
-        
-        handButtons[card]->signal_clicked().connect(
-                sigc::bind(sigc::mem_fun(*this, &GtkView::onCardClicked), cardInHand)
-        );
-        handButtons[card]->add(*cardsInHand[card]);
-        handBox_.add(*handButtons[card]);
-    }
-
-    for (int card = gameState_.hand.size(); card < HAND_SIZE; card++) {
-        handButtons[card] = Gtk::manage(new Gtk::Button());
-        handButtons[card]->add(*Gtk::manage(new Gtk::Image(images_.getCardImage(NIL_CARD))));
-        handBox_.add(*handButtons[card]);
-    }
-    show_all();
-}
 
 void GtkView::setTableImages() {
     for (Card c : gameState_.cardsOnTable) {
@@ -228,14 +142,12 @@ void GtkView::toggleHumanClicked(int playerNumber) {
 void GtkView::queryModel() {
     bool isPlaying = game_->isStarted();
     int currentPlayer;
-    std::vector<Card> hand;
     std::set<Card> cardsOnTable;
     std::vector<Card> validMoves;
     std::vector<GameState::PlayerInfo> playerInfo;
 
     if (isPlaying) {
         currentPlayer = game_->getCurrentPlayer()->getNumber();
-        hand = game_->getCurrentPlayer()->getHand()->getCards();
         cardsOnTable = game_->getTable()->getCards();
         validMoves = game_->getCurrentPlayer()->getHand()->getValidMoves(cardsOnTable);
     }
@@ -253,7 +165,6 @@ void GtkView::queryModel() {
 
     gameState_ = {
             currentPlayer,
-            hand,
             cardsOnTable,
             validMoves,
             playerInfo,
@@ -264,8 +175,6 @@ void GtkView::queryModel() {
 
 void GtkView::update() {
     queryModel();
-    clearHandButtons();
-    setHandButtons();
     clearTableImages();
     setTableImages();
     setScores();

@@ -12,28 +12,11 @@
 #include "Game.h"
 #include "ImageFactory.h"
 #include "GameController.h"
+#include "HandView.h"
 
 
-
-
-const int HAND_SIZE = RANK_COUNT * SUIT_COUNT / Game::NUM_PLAYERS;
 const int TABLE_SIZE = RANK_COUNT * SUIT_COUNT;
 
-struct GameState {
-    int currentPlayer;
-    std::vector<Card> hand;
-    std::set<Card> cardsOnTable;
-    std::vector<Card> validMoves;
-    struct PlayerInfo {
-        PlayerInfo(std::string name, int score, int discards, bool isHuman);
-        std::string name;
-        int score;
-        int discards;
-        bool isHuman;
-    };
-    std::vector<PlayerInfo> playerInfo;
-    bool isPlaying;
-};
 
 class GtkView : public Gtk::Window, public Observer {
 public:
@@ -41,31 +24,46 @@ public:
     virtual ~GtkView();
     void update();
 protected:
+
+
+    struct GameState {
+        int currentPlayer;
+        std::set<Card> cardsOnTable;
+        std::vector<Card> validMoves;
+        struct PlayerInfo {
+            PlayerInfo(std::string name, int score, int discards, bool isHuman);
+            std::string name;
+            int score;
+            int discards;
+            bool isHuman;
+        };
+        std::vector<PlayerInfo> playerInfo;
+        bool isPlaying;
+    };
+
+
     Game* game_;
     GameController* controller_;
     GameState gameState_;
-    void onCardClicked(Card);
+
     void onNewGameClicked();
     void onEndGameClicked();
     void queryModel();
-    void clearHandButtons();
-    void setHandButtons();
+
     void clearTableImages();
     void setTableImages();
     void setScores();
     void setRageButtons();
     void toggleHumanClicked(int playerNumber);
+    bool isCardPlayable(GameState*, Card);
 
-    Gtk::Button button_;
+    HandView handView_;
+
     Gtk::VBox mainBox_;
-    Gtk::HBox handBox_;
     Gtk::HBox headerBox_;
     Gtk::Button newGameButton_;
     Gtk::Entry seedTextEntry_;
     Gtk::Button endGameButton_;
-    Gtk::Image *cardsInHand[HAND_SIZE];
-    Gtk::Button *handButtons[HAND_SIZE];
-    Gtk::Frame frame_;
     Gtk::HBox playerInfosBox_;
     Gtk::Frame *playerFrames[Game::NUM_PLAYERS];
     Gtk::VBox *playerHolders[Game::NUM_PLAYERS];
