@@ -45,7 +45,7 @@ bool operator!=(const Card &a, const Card &b){
 }
 
 bool operator>(const Card &a, const Card &b){
-    return a.getSuit() > b.getSuit() || (a.getSuit() == b.getSuit() && a.getRank() > b.getRank());
+    return a.getRank() > b.getRank() || (a.getRank() == b.getRank() && a.getSuit() > b.getSuit());
 }
 
 bool operator>=(const Card &a, const Card &b){
