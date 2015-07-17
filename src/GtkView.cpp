@@ -3,8 +3,9 @@
 //
 
 #include "GtkView.h"
+#include <sstream>
 
-GtkView::GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, int discards_, bool isHuman_): name(name_), score(score_), discards(discards_), isHuman(isHuman_) {}
+GtkView::GameState::PlayerInfo::PlayerInfo(std::string name_, int score_, std::vector<Card> discards_, bool isHuman_): name(name_), score(score_), discards(discards_), isHuman(isHuman_) {}
 
 
 GtkView::GtkView(Game* game, GameController* controller): game_(game), controller_(controller), popUpShown(true), mainBox_(false, 10), headerBox_(false,10), newGameButton_("New Game"), endGameButton_("End Game"), playerInfosBox_(true, 10), table_(SUIT_COUNT, RANK_COUNT), handView_(game, controller){
@@ -102,7 +103,7 @@ void GtkView::setTableImages() {
 void GtkView::setScores() {
     for (int i = 0; i < Game::NUM_PLAYERS; i++) {
         scoreTexts[i]->set_text("Score: " + std::to_string(gameState_.playerInfo[i].score));
-        discardTexts[i]->set_text("Discards: " + std::to_string(gameState_.playerInfo[i].discards));
+        discardTexts[i]->set_text("Discards: " + std::to_string(gameState_.playerInfo[i].discards.size()));
     }
 }
 
@@ -152,7 +153,7 @@ void GtkView::queryModel() {
         GameState::PlayerInfo info = {
                 player.getName(),
                 player.getScore(),
-                isPlaying ? (int) player.getDiscards()->size() : 0,
+                isPlaying ? *(player.getDiscards()) : std::vector<Card>(),
                 player.isHuman()
         };
         playerInfo.push_back(info);
@@ -169,19 +170,34 @@ void GtkView::queryModel() {
 
 void GtkView::endOfRoundPopups() {
     if (!popUpShown) {
+        if (gameState_.isEndOfRound || !gameState_.isPlaying) {
+            std::cout << std::endl << "End of Round" << std::endl;
+
+            std::stringstream ss;
+            for (int i = 0; i < Game::NUM_PLAYERS; i++) {
+                GameState::PlayerInfo player = gameState_.playerInfo[i];
+                int scoreGained = 0;
+                for (Card card : player.discards) {
+                    scoreGained += card.getRank() + 1;
+                }
+                int oldScore = player.score - scoreGained;
+                ss << "Player " << player.name << "'s discards:" << Card::prettyPrint(player.discards) << std::endl;
+                ss << "Player " << player.name << "'s score: " << oldScore << " + " << scoreGained << " = " << player.score << std::endl;
+            }
+            Gtk::MessageDialog dialog( ss.str(), true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
+            dialog.run();
+            popUpShown = true;
+            //If the game hasn't ended, ok will just start the next round
+            if (gameState_.isPlaying) {
+                startNextRound();
+            }
+        }
         if (!gameState_.isPlaying) {
-            std::cout << "End of Game";
+            std::cout << std::endl << "End of Game" << std::endl;
 
             Gtk::MessageDialog dialog( "End of Game", true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
             dialog.run();
             popUpShown = true;
-        }
-        if (gameState_.isEndOfRound) {
-            std::cout << "End of Round";
-            Gtk::MessageDialog dialog( "End of Round", true, Gtk::MessageType::MESSAGE_INFO, Gtk::ButtonsType::BUTTONS_OK, true );
-            dialog.run();
-            popUpShown = true;
-            startNextRound();
         }
     }
 }

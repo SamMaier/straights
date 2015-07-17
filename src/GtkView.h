@@ -22,17 +22,16 @@ public:
     GtkView(Game*, GameController*);
     virtual ~GtkView();
     void update();
+
 protected:
-
-
     struct GameState {
         int currentPlayer;
         std::set<Card> cardsOnTable;
         struct PlayerInfo {
-            PlayerInfo(std::string name, int score, int discards, bool isHuman);
+            PlayerInfo(std::string name, int score, std::vector<Card> discards, bool isHuman);
             std::string name;
             int score;
-            int discards;
+            std::vector<Card> discards;
             bool isHuman;
         };
         std::vector<PlayerInfo> playerInfo;
