@@ -20,7 +20,6 @@ PlayersView::PlayersView(Game *game, GameController *controller): game_(game), c
         playerFrames[playerNumber]->set_label_align(Gtk::ALIGN_LEFT, Gtk::ALIGN_TOP);
         playerFrames[playerNumber]->set_shadow_type(Gtk::SHADOW_ETCHED_OUT);
 
-
         quitButtons[playerNumber] = Gtk::manage(new Gtk::Button("Make computer"));
         quitButtons[playerNumber]->signal_clicked().connect(
                 sigc::bind(sigc::mem_fun(*this, &PlayersView::toggleHumanClicked), playerNumber));
