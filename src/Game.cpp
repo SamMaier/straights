@@ -2,6 +2,7 @@
 // Created by Shiranka Miskin on 6/17/15.
 //
 
+#include <iostream>
 #include "Game.h"
 
 
@@ -68,6 +69,7 @@ const std::vector<Player>* Game::getPlayers() const {
 
 void Game::endGame() {
     // going to likely need work
+    std::cout << "ending game" << std::endl;
     running_ = false;
     notify();
 }
@@ -140,8 +142,6 @@ void Game::nextTurn() {
         Player* maxScorePlayer = getMaxScorePlayer(&players_);
         if (maxScorePlayer->getScore() >= MAX_SCORE) {
             endGame();
-            //just aguess
-            notify();
             return;
         } else {
             nextRound();
@@ -149,12 +149,13 @@ void Game::nextTurn() {
     }
 
 
-    if (!players_[currentPlayer_].isHuman()) {
+    if (running_ && !players_[currentPlayer_].isHuman()) {
         playComputerTurn();
         nextTurn();
+    } else {
+        notify();
     }
 
-    notify();
 }
 
 void Game::nextRound() {
