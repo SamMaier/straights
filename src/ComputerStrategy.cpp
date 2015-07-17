@@ -11,11 +11,12 @@ Command ComputerStrategy::getPlay(const Hand& hand, const Table& table) const{
 
     if ( validMoves.size() > 0){
         c.type = Type::PLAY;
-        c.card = validMoves[0];
+        c.card = *max_element(validMoves.begin(), validMoves.end());
     }
     else {
         c.type = Type::DISCARD;
-        c.card = hand.getCards()[0];
+        vector<Card> discardable = hand.getCards();
+        c.card = *min_element(discardable.begin(), discardable.end());
     }
 
     return c;

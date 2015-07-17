@@ -2,6 +2,7 @@
 // Created by Shiranka Miskin on 6/17/15.
 //
 
+#include <iostream>
 #include "Game.h"
 
 
@@ -68,6 +69,7 @@ const std::vector<Player>* Game::getPlayers() const {
 
 void Game::endGame() {
     // going to likely need work
+    std::cout << "ending game" << std::endl;
     running_ = false;
     notify();
 }
@@ -75,10 +77,11 @@ void Game::endGame() {
 void Game::startGame(int seed) {
     // going to likely need work
     for (int player = 0; player < NUM_PLAYERS; player++) {
-        players_[player].resetPlayer();;
+        players_[player].resetPlayer();
     }
     seed_ = seed;
     running_ = true;
+    deck_ = Deck();
     startNextRound();
     notify();
 }
@@ -139,7 +142,6 @@ void Game::nextTurn() {
         Player* maxScorePlayer = getMaxScorePlayer(&players_);
         if (maxScorePlayer->getScore() >= MAX_SCORE) {
             endGame();
-            notify();
         } else {
             nextRound();
         }
@@ -147,12 +149,13 @@ void Game::nextTurn() {
     }
 
 
-    if (!players_[currentPlayer_].isHuman()) {
+    if (running_ && !players_[currentPlayer_].isHuman()) {
         playComputerTurn();
         nextTurn();
+    } else {
+        notify();
     }
 
-    notify();
 }
 
 bool Game::isEndOfRound() const {
@@ -188,8 +191,11 @@ void Game::startNextRound() {
         hands_[player].addCard(card);
 
         // The player with the Seven of Spades is the player to go first
-        if (card.getRank() == Rank::SEVEN && card.getSuit() == Suit::SPADE)
-            currentPlayer_ = player;
+        if (card.getRank() == Rank::SEVEN && card.getSuit() == Suit::SPADE) {
+            // Set player to be 1 less than the player with the 7 of spades so that nextTurn moves to the one with 7 of spades
+            currentPlayer_ = (player == 0 ? NUM_PLAYERS : player) - 1;
+        }
+
     }
 
     // Let the player know of their hand and discard piles
@@ -199,8 +205,7 @@ void Game::startNextRound() {
     }
 
     table_.clear();
-    notify();
-
+    nextTurn();
 }
 
 bool Game::isValidPlay(const Card& card, const Hand& hand, const Table& table) {

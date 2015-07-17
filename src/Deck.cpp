@@ -4,6 +4,7 @@
 
 #include "Deck.h"
 #include <random>
+#include <iostream>
 
 Deck::Deck() {
     for (int suit = 0; suit < SUIT_COUNT; suit++) {
@@ -14,7 +15,7 @@ Deck::Deck() {
 }
 
 void Deck::shuffle(int seed){
-    static std::mt19937 rng(seed);
+    std::mt19937 rng(seed);
 
     int n = NUM_CARDS;
 

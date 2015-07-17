@@ -4,10 +4,8 @@
 #include "Hand.h"
 #include "Table.h"
 #include "Command.h"
-#include "View.h"
 #include "Strategy.h"
 
-class View;
 
 class Player {
 public:
@@ -16,7 +14,6 @@ public:
     Player(const Player&);
     Player& operator= (const Player&);
     Command getPlay(const Table&) const;
-    void alertPlay(const Table&) const;
     std::string getName() const;
     int getNumber() const;
     void ragequit(); // Disable a human player and set it to a computer
@@ -35,7 +32,6 @@ private:
     int score_;
     const Hand* hand_;
     const std::vector<Card>* discards_;
-    View* view_;
     bool isHuman_;
     Strategy* strategy_;
 };
