@@ -183,7 +183,6 @@ void Game::nextRound() {
         if (card.getRank() == Rank::SEVEN && card.getSuit() == Suit::SPADE) {
             // Set player to be 1 less than the player with the 7 of spades so that nextTurn moves to the one with 7 of spades
             currentPlayer_ = (player == 0 ? NUM_PLAYERS : player) - 1;
-            std::cout << "Next player: " << player << std::endl;
         }
 
     }
